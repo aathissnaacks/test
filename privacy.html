@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Policy | Aathi's Snaacks</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    bg: '#FAFAF5',
+                    red: '#C04000',
+                    gold: '#D4AF37',
+                    dark: '#2D2D2D'
+                }
+            },
+            fontFamily: {
+                sans: ['Outfit', 'sans-serif'],
+                tamil: ['Mukta Malar', 'sans-serif'],
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body { background:#FAFAF5; color:#2D2D2D; }
+.font-ta { font-family: 'Mukta Malar', sans-serif; }
+
+[data-lang="ta"] { display:none; }
+body.lang-tamil [data-lang="en"] { display:none; }
+body.lang-tamil [data-lang="ta"] { display:block; }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="sticky top-0 bg-white border-b shadow-sm z-50">
+<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+
+<div class="flex items-center gap-3">
+<img src="logonobg.jpeg" class="w-10 h-10 rounded-full border">
+<h1 class="font-bold text-lg">Aathi's Snaacks</h1>
+</div>
+
+<div>
+<button onclick="setLanguage('en')" class="px-3 py-1 bg-brand-dark text-white rounded-full text-sm">EN</button>
+<button onclick="setLanguage('ta')" class="px-3 py-1 text-gray-500 rounded-full text-sm font-ta">தமிழ்</button>
+</div>
+
+</div>
+</header>
+
+<!-- HERO -->
+<section class="text-center py-12">
+<h1 class="text-4xl font-extrabold text-brand-dark mb-4">
+<span data-lang="en">Policy</span>
+<span data-lang="ta" class="font-ta">கொள்கை</span>
+</h1>
+
+<p class="text-gray-600">
+<span data-lang="en">Transparency builds trust. Here's everything you need to know.</span>
+<span data-lang="ta" class="font-ta">நம்பிக்கைக்கான வெளிப்படைத்தன்மை.</span>
+</p>
+</section>
+
+<!-- CONTENT -->
+<section class="max-w-4xl mx-auto px-4 pb-16">
+<div class="bg-white rounded-3xl shadow-xl p-6 sm:p-10 leading-relaxed text-gray-700 space-y-4">
+
+<!-- 🔥 REPLACE THIS BLOCK PER PAGE -->
+<h2 class="text-2xl font-bold text-brand-dark">Page Title</h2>
+
+<h2 class="text-2xl font-bold text-brand-dark">Privacy Policy</h2>
+
+<p><strong>Last updated on 04-04-2026</strong></p>
+
+<p>
+Aathi Shivaya Group of Companies (“we”, “our”, “us”) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website or place an order.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">1. Information We Collect</h3>
+<ul class="list-disc pl-5 space-y-2">
+<li>Name</li>
+<li>Phone number</li>
+<li>Delivery address</li>
+<li>Email address (if provided)</li>
+<li>Order and transaction details</li>
+</ul>
+
+<h3 class="font-semibold text-lg mt-6">2. How We Use Your Information</h3>
+<ul class="list-disc pl-5 space-y-2">
+<li>To process and fulfill your orders</li>
+<li>To communicate order updates and customer support</li>
+<li>To improve our services and customer experience</li>
+<li>To comply with legal obligations</li>
+</ul>
+
+<h3 class="font-semibold text-lg mt-6">3. Payment Information</h3>
+<p>
+All payments are securely processed through trusted third-party payment gateways such as Cashfree. We do not store your card details, UPI credentials, or banking information on our servers.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">4. Data Sharing</h3>
+<p>
+We do not sell or rent your personal data. Your information may only be shared with:
+</p>
+<ul class="list-disc pl-5 space-y-2">
+<li>Payment gateway providers (for transaction processing)</li>
+<li>Delivery partners (for order fulfillment)</li>
+<li>Government authorities if required by law</li>
+</ul>
+
+<h3 class="font-semibold text-lg mt-6">5. Data Security</h3>
+<p>
+We implement reasonable security measures to protect your personal information from unauthorized access, misuse, or disclosure.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">6. Cookies</h3>
+<p>
+Our website may use basic cookies to improve user experience. These cookies do not collect sensitive personal information.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">7. User Rights</h3>
+<p>
+You may contact us to update or delete your personal information at any time.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">8. Changes to Policy</h3>
+<p>
+We reserve the right to update this Privacy Policy at any time. Changes will be posted on this page.
+</p>
+
+<h3 class="font-semibold text-lg mt-6">9. Contact Us</h3>
+<p>
+If you have any questions about this Privacy Policy, you may contact us:
+</p>
+
+<p>
+<strong>Aathi Shivaya Group of Companies</strong><br>
+Thoothukudi, Tamil Nadu – 628008<br>
+Phone: +91 9442953995<br>
+Email: support@aathissnaacks.com
+</p>
+
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-black text-white py-10 text-center">
+<h2 class="text-2xl font-bold mb-2">Aathi's Snaacks</h2>
+<p class="text-gray-400 text-sm">Aathi Shivaya Group of Companies</p>
+</footer>
+
+<script>
+function setLanguage(lang){
+    if(lang === 'ta'){
+        document.body.classList.add('lang-tamil');
+    } else {
+        document.body.classList.remove('lang-tamil');
+    }
+}
+</script>
+
+</body>
+</html>
