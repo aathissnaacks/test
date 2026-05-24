@@ -97,11 +97,15 @@
     }
   };
 
-  // ── UPDATE ORDER (screenshot etc) ──
+  // ── UPDATE ORDER (status, payment confirmation) ──
   window._fbUpdateOrder = async function(orderId, data) {
-    if (!db || orderId.startsWith('ORD')) return; // local-only order
+    if (!db) return;
+    // Never store base64 screenshot in Firestore (exceeds 1MB doc limit)
+    // Screenshot stays in localStorage only
+    const firestoreData = { ...data };
+    delete firestoreData.screenshot;
     try {
-      await updateDoc(doc(db, 'orders', orderId), data);
+      await updateDoc(doc(db, 'orders', orderId), firestoreData);
       console.log('[Firebase] Order updated:', orderId);
     } catch(e) { console.error('[Firebase] updateOrder error:', e.code, e.message); }
   };
@@ -1099,7 +1103,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
       </div>
 
       <div class="upi-id-box">
-        <span>9442953995@okbuzaxis</span>
+        <span>9442953995@okbizaxis</span>
         <button class="copy-btn" onclick="copyUPI()">Copy</button>
       </div>
 
@@ -1142,7 +1146,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 // ══════════════════════════════════════════════════════════
 // STORE CONFIG
 // ══════════════════════════════════════════════════════════
-const UPI_ID = '9442953995@okbuzaxis';
+const UPI_ID = '9442953995@okbizaxis';
 const STORE_NAME = "Aathi's Snaacks";
 
 // ══════════════════════════════════════════════════════════
