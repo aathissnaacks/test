@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Aathi's Snaacks | Traditional Indian Snack House</title>
+<meta name="description" content="Learn about Aathi's Snaacks — India's traditional snack house from Thoothukudi. Founded by Alagu Panduva Murthy S., we bring authentic homemade snacks to your doorstep.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.aathissnaacks.com/about.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF5;
+  --red: #C04000;
+  --gold: #D4AF37;
+  --dark: #1A1A1A;
+  --cream: #FFF8EE;
+  --border: rgba(212,175,55,0.25);
+  --text2: #6B7280;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+a { color: var(--red); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+
+/* ── HEADER ── */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,245,0.97); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+}
+.header-inner {
+  max-width: 1100px; margin: auto;
+  padding: 0 1.5rem; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-wrap { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.logo-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); background: #fff; }
+.logo-text h1 { font-size: 1.1rem; color: var(--dark); line-height: 1.2; }
+.logo-text p { font-size: 0.6rem; color: var(--red); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'DM Sans', sans-serif; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { font-size: 0.88rem; font-weight: 500; color: #555; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--red); text-decoration: none; }
+.btn-shop { background: var(--dark); color: #fff; padding: 0.55rem 1.25rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; transition: background 0.2s; }
+.btn-shop:hover { background: var(--red); text-decoration: none; }
+
+/* ── HERO ── */
+.about-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0a 60%, #3d2010 100%);
+  color: #fff; padding: 6rem 1.5rem 5rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.about-hero::before {
+  content: ''; position: absolute; inset: 0; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='25' stroke='%23D4AF37' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-size: 60px;
+}
+.about-hero-inner { max-width: 700px; margin: auto; position: relative; z-index: 1; }
+.hero-eyebrow { display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.35); color: var(--gold); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.35rem 1rem; border-radius: 999px; margin-bottom: 1.5rem; font-family: 'DM Sans', sans-serif; }
+.about-hero h2 { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.1; margin-bottom: 1.2rem; }
+.about-hero h2 span { color: var(--gold); }
+.about-hero p { font-size: 1.05rem; color: #aaa; max-width: 520px; margin: auto; line-height: 1.8; }
+
+/* ── CONTENT ── */
+.section { padding: 5rem 1.5rem; }
+.section-inner { max-width: 1100px; margin: auto; }
+.section-inner.narrow { max-width: 760px; }
+
+.section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin-bottom: 0.75rem; }
+.section-title { font-size: clamp(1.8rem, 3.5vw, 2.5rem); color: var(--dark); margin-bottom: 1.25rem; line-height: 1.2; }
+.section-divider { width: 48px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 1.5rem; }
+.body-text { font-size: 1rem; color: #555; line-height: 1.9; }
+.body-text p { margin-bottom: 1.25rem; }
+
+/* ── STORY SPLIT ── */
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+@media (max-width: 768px) { .story-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+.story-img-wrap { position: relative; }
+.story-img-frame { border-radius: 1.5rem; overflow: hidden; aspect-ratio: 4/5; box-shadow: 0 12px 48px rgba(0,0,0,0.15); }
+.story-img-frame img { width: 100%; height: 100%; object-fit: cover; }
+.story-img-badge {
+  position: absolute; bottom: -1.5rem; right: -1.5rem;
+  background: var(--dark); color: #fff;
+  border-radius: 1rem; padding: 1rem 1.25rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  text-align: center; min-width: 120px;
+}
+.story-img-badge .badge-num { font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; font-family: 'DM Sans', sans-serif; }
+.story-img-badge .badge-txt { font-size: 0.72rem; color: #aaa; font-weight: 500; margin-top: 0.2rem; }
+
+/* ── VALUES ── */
+.values-section { background: var(--dark); color: #fff; }
+.values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+.value-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 2rem; transition: background 0.3s; }
+.value-card:hover { background: rgba(255,255,255,0.08); }
+.value-icon { font-size: 2rem; margin-bottom: 1rem; }
+.value-title { font-size: 1.1rem; color: var(--gold); margin-bottom: 0.6rem; font-family: 'Playfair Display', serif; }
+.value-desc { font-size: 0.88rem; color: #999; line-height: 1.7; }
+
+/* ── FOUNDER ── */
+.founder-section { background: var(--cream); }
+.founder-grid { display: grid; grid-template-columns: 340px 1fr; gap: 4rem; align-items: center; }
+@media (max-width: 768px) { .founder-grid { grid-template-columns: 1fr; } }
+.founder-img-wrap { position: relative; }
+.founder-img-bg { position: absolute; inset: -12px; background: rgba(192,64,0,0.1); border-radius: 2rem; transform: rotate(-3deg); }
+.founder-img { position: relative; border-radius: 2rem; overflow: hidden; aspect-ratio: 4/5; border: 3px solid rgba(192,64,0,0.2); }
+.founder-img img { width: 100%; height: 100%; object-fit: cover; }
+.founder-quote { border-left: 3px solid var(--red); padding: 0.85rem 1.25rem; background: #fff; border-radius: 0 0.75rem 0.75rem 0; margin: 1.5rem 0; font-style: italic; font-size: 1rem; color: #555; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.founder-sig { font-weight: 700; color: var(--red); font-size: 0.95rem; }
+.founder-title { font-size: 0.8rem; color: #888; font-weight: 500; }
+
+/* ── CERTIFICATIONS ── */
+.certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+.cert-card { background: #fff; border: 1px solid #eee; border-radius: 1rem; padding: 1.5rem; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.cert-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+.cert-title { font-weight: 700; font-size: 0.92rem; color: var(--dark); margin-bottom: 0.35rem; }
+.cert-num { font-size: 0.78rem; color: #888; font-family: 'DM Sans', sans-serif; }
+
+/* ── STATS ── */
+.stats-bar { background: var(--red); color: #fff; padding: 3rem 1.5rem; }
+.stats-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
+@media (max-width: 640px) { .stats-inner { grid-template-columns: 1fr 1fr; } }
+.stat-num { font-size: 2.5rem; font-weight: 900; font-family: 'DM Sans', sans-serif; line-height: 1; }
+.stat-lbl { font-size: 0.8rem; opacity: 0.85; margin-top: 0.35rem; font-weight: 500; }
+
+/* ── CTA ── */
+.cta-section { background: var(--bg); text-align: center; padding: 5rem 1.5rem; }
+.btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--dark); color: #fff; padding: 0.9rem 2rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; transition: all 0.25s; }
+.btn-primary:hover { background: var(--red); text-decoration: none; transform: translateY(-2px); }
+.btn-wa { display: inline-flex; align-items: center; gap: 0.5rem; background: #25D366; color: #fff; padding: 0.9rem 2rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; transition: all 0.25s; }
+.btn-wa:hover { text-decoration: none; transform: translateY(-2px); opacity: 0.9; }
+.cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+
+/* ── FOOTER ── */
+.site-footer { background: #0a0a0a; color: #fff; padding: 2.5rem 1.5rem; border-top: 4px solid var(--red); }
+.footer-inner { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; font-size: 0.82rem; color: #555; }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { color: #666; transition: color 0.2s; }
+.footer-links a:hover { color: #fff; text-decoration: none; }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 640px) { .nav-links { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="logonobg.jpeg" alt="Aathi's Snaacks" class="logo-img" width="44" height="44"
+        onerror="this.style.background='#D4AF37';this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 44 44%22><text y=%2232%22 font-size=%2224%22>🍬</text></svg>'">
+      <div class="logo-text">
+        <h1>Aathi's Snaacks</h1>
+        <p>Aathi Shivaya Group of Companies</p>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Shop</a>
+      <a href="about.html" class="active">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html#products" class="btn-shop">Order Now</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="about-hero-inner">
+    <div class="hero-eyebrow">Est. 2024 · Thoothukudi, Tamil Nadu</div>
+    <h2>Homemade Soul,<br><span>Delivered Anywhere</span></h2>
+    <p>We are India's traditional snack house — born from a passion to preserve authentic flavours and bring them to every doorstep across the country.</p>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">100%</div><div class="stat-lbl">Homemade</div></div>
+    <div><div class="stat-num">0</div><div class="stat-lbl">Preservatives</div></div>
+    <div><div class="stat-num">Pan</div><div class="stat-lbl">India Delivery</div></div>
+    <div><div class="stat-num">MSME</div><div class="stat-lbl">Certified</div></div>
+  </div>
+</div>
+
+<!-- OUR STORY -->
+<section class="section" style="background:#fff;">
+  <div class="section-inner">
+    <div class="story-grid">
+      <div class="story-img-wrap reveal">
+        <div class="story-img-frame">
+          <img src="combo1.jpeg" alt="Aathi's Snaacks products"
+            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 500%22><rect width=%22400%22 height=%22500%22 fill=%22%23f5f5f0%22/><text x=%22200%22 y=%22260%22 text-anchor=%22middle%22 font-size=%2280%22>🍬</text></svg>'">
+        </div>
+        <div class="story-img-badge">
+          <div class="badge-num">2024</div>
+          <div class="badge-txt">Founded in<br>Thoothukudi</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">Born from a Gap<br>in the Market</h2>
+        <div class="section-divider"></div>
+        <div class="body-text">
+          <p>Walk into any supermarket today and you will find rows of factory-made snacks — uniform, preservative-laden, and completely devoid of the soul that makes food memorable. That is the problem Aathi's Snaacks was created to solve.</p>
+          <p>Founded in 2024 in Thoothukudi — a coastal city in Tamil Nadu famous for its Tuty Macroons and traditional sweets — Aathi's Snaacks began with a simple mission: make authentic, homemade-quality snacks accessible to everyone across India, not just those lucky enough to live near a traditional sweet shop.</p>
+          <p>Every product we make is crafted by hand, using recipes passed down through generations, with no artificial preservatives, no shortcuts, and no compromise on taste. We are not a factory — we are a snack house.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section values-section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 1rem;">
+      <div class="section-label" style="color:var(--gold)">What We Stand For</div>
+      <h2 class="section-title" style="color:#fff;">Our Values</h2>
+      <div class="section-divider" style="margin:0 auto 1rem;"></div>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-icon">🤲</div>
+        <div class="value-title">Handcrafted Always</div>
+        <div class="value-desc">Every batch is made by hand. No machines, no mass production. Each piece carries the care and attention it deserves.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🌿</div>
+        <div class="value-title">Pure Ingredients</div>
+        <div class="value-desc">We use only natural ingredients — real karupatti, fresh cashews, traditional spices. No artificial colours, flavours, or preservatives.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">📦</div>
+        <div class="value-title">Doorstep Fresh</div>
+        <div class="value-desc">Made to order and shipped pan-India. You receive your snacks as fresh as if you picked them up from our kitchen.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🏛️</div>
+        <div class="value-title">Heritage First</div>
+        <div class="value-desc">Thoothukudi has a centuries-old tradition of snack-making. We carry that heritage with pride and share it with the world.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Honest Business</div>
+        <div class="value-desc">Transparent pricing, no hidden charges, and genuine customer service. What you see is what you get — always.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🇮🇳</div>
+        <div class="value-title">Proudly Indian</div>
+        <div class="value-desc">MSME certified, FSSAI licensed, built in India for India. Every order supports a small homegrown business.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="section founder-section">
+  <div class="section-inner">
+    <div class="founder-grid">
+      <div class="founder-img-wrap reveal">
+        <div class="founder-img-bg"></div>
+        <div class="founder-img">
+          <img src="founder.jpeg" alt="Alagu Panduva Murthy S. — Founder"
+            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 340 425%22><rect width=%22340%22 height=%22425%22 fill=%22%23f0ede8%22/><text x=%22170%22 y=%22220%22 text-anchor=%22middle%22 font-size=%22100%22>👤</text></svg>'">
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="section-label">Meet the Founder</div>
+        <h2 class="section-title">Alagu Panduva<br>Murthy S.</h2>
+        <div class="section-divider"></div>
+        <div class="body-text">
+          <p>A native of Thoothukudi, Alagu Panduva Murthy S. grew up surrounded by the rich snack culture of coastal Tamil Nadu — the aroma of freshly roasted kadalai, the sweetness of karupatti mittai, and the iconic crunch of Tuty Macroons.</p>
+          <p>After years of watching the market flood with mass-produced, flavourless alternatives, he decided to do something about it. In 2024, he founded Aathi's Snaacks under the Aathi Shivaya Group of Companies — not just as a business, but as a mission to preserve and share authentic flavours.</p>
+          <blockquote class="founder-quote">"I was tired of seeing our traditional snacks being replaced by factory products that taste of nothing. I wanted anyone, anywhere in India, to be able to close their eyes, take a bite, and feel like they are back home."</blockquote>
+          <p class="founder-sig">— Alagu Panduva Murthy S.</p>
+          <p class="founder-title">Founder, Aathi's Snaacks · Aathi Shivaya Group of Companies</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="section" style="background:#fff;">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;max-width:560px;margin:0 auto 0;">
+      <div class="section-label">Trust & Compliance</div>
+      <h2 class="section-title">Certified & Licensed</h2>
+      <div class="section-divider" style="margin:0 auto 1rem;"></div>
+      <p style="color:#888;font-size:0.92rem;">We operate with full regulatory compliance so you can order with complete confidence.</p>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">🟢</div>
+        <div class="cert-title">FSSAI Licensed</div>
+        <div class="cert-num">Lic. No. 12422029000996</div>
+        <div class="cert-num" style="margin-top:0.25rem;">PLN No. TNTTN3407</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🏆</div>
+        <div class="cert-title">MSME Certified</div>
+        <div class="cert-num">UDYAM-TN-26-0089769</div>
+        <div class="cert-num" style="margin-top:0.25rem;">Ministry of MSME, Govt. of India</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🔒</div>
+        <div class="cert-title">Secure Payments</div>
+        <div class="cert-num">UPI-based payment system</div>
+        <div class="cert-num" style="margin-top:0.25rem;">No card data stored</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🚚</div>
+        <div class="cert-title">Pan-India Delivery</div>
+        <div class="cert-num">Ships across all states</div>
+        <div class="cert-num" style="margin-top:0.25rem;">3–7 working days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="reveal" style="max-width:560px;margin:auto;">
+    <div class="section-label" style="text-align:center;">Ready to Taste?</div>
+    <h2 class="section-title" style="text-align:center;font-size:clamp(1.8rem,3.5vw,2.5rem);">Order Fresh from<br>Our Kitchen</h2>
+    <p style="color:#888;text-align:center;font-size:0.95rem;">Shipped directly from Thoothukudi to your home. No middlemen, no markup, just pure taste.</p>
+    <div class="cta-btns">
+      <a href="index.html#products" class="btn-primary">🛍 Shop Now</a>
+      <a href="https://wa.me/919442953995?text=Hi%2C%20I%20want%20to%20know%20more%20about%20Aathi%27s%20Snaacks!" target="_blank" rel="noopener" class="btn-wa">💬 WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© <span id="yr"></span> Aathi Shivaya Group of Companies. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
