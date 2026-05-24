@@ -15,7 +15,7 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import {
     getFirestore, collection, getDocs, doc,
-    updateDoc, setDoc, deleteDoc, query, orderBy
+    updateDoc, setDoc, deleteDoc
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -32,23 +32,46 @@
   try {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
-    console.log('Admin Firebase connected');
-  } catch(e) { console.warn('Firebase init failed', e); }
+    console.log('[Admin] Firebase connected ✅');
+  } catch(e) { console.warn('[Admin] Firebase init failed', e); }
 
-  // ── Orders ──
+  // ── Fetch all orders (no orderBy — avoids index requirement) ──
+  // Sorted client-side instead
   window.firebaseGetOrders = async function() {
     if (!db) return null;
     try {
-      const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch(e) { console.error('getOrders', e); return null; }
+      const snap = await getDocs(collection(db, 'orders'));
+      const orders = snap.docs.map(d => {
+        const data = d.data();
+        // Normalise createdAt — Firestore Timestamp → ISO string
+        if (data.createdAt && data.createdAt.toDate) {
+          data.createdAt = data.createdAt.toDate().toISOString();
+        }
+        return { id: d.id, ...data };
+      });
+      // Sort newest first client-side
+      orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      console.log('[Admin] Orders fetched from Firestore:', orders.length);
+      return orders;
+    } catch(e) {
+      console.error('[Admin] getOrders failed:', e.code, e.message);
+      return null;
+    }
   };
 
+  // ── Update order status (never write screenshot to Firestore) ──
   window.firebaseUpdateOrder = async function(orderId, data) {
     if (!db) return false;
-    try { await updateDoc(doc(db, 'orders', orderId), data); return true; }
-    catch(e) { console.error('updateOrder', e); return false; }
+    const payload = { ...data };
+    delete payload.screenshot; // screenshots stay in localStorage only
+    try {
+      await updateDoc(doc(db, 'orders', orderId), payload);
+      console.log('[Admin] Order updated:', orderId);
+      return true;
+    } catch(e) {
+      console.error('[Admin] updateOrder failed:', e.code, e.message);
+      return false;
+    }
   };
 
   // ── Generic collection helpers ──
@@ -57,24 +80,25 @@
     try {
       const snap = await getDocs(collection(db, col));
       return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch(e) { console.error('getCollection', col, e); return null; }
+    } catch(e) { console.error('[Admin] getCollection failed:', col, e.code); return null; }
   };
 
   window.firebaseSetDoc = async function(col, docId, data) {
     if (!db) return false;
     try {
       const payload = { ...data, adminKey: 'AS_ADMIN_KEY_2025' };
-      delete payload.id; // don't store id field inside document
+      delete payload.id;
+      delete payload.screenshot; // never store base64 in Firestore
       await setDoc(doc(db, col, docId), payload, { merge: true });
-      console.log('[Admin] saved', col, docId);
+      console.log('[Admin] Saved:', col, docId);
       return true;
-    } catch(e) { console.error('setDoc', col, docId, e); return false; }
+    } catch(e) { console.error('[Admin] setDoc failed:', col, e.code, e.message); return false; }
   };
 
   window.firebaseDeleteDoc = async function(col, docId) {
     if (!db) return false;
     try { await deleteDoc(doc(db, col, docId)); return true; }
-    catch(e) { console.error('deleteDoc', col, docId, e); return false; }
+    catch(e) { console.error('[Admin] deleteDoc failed:', col, e.code); return false; }
   };
 </script>
 
@@ -506,6 +530,7 @@ body {
     <div class="admin-nav-actions">
       <button class="nav-tab active" onclick="switchTab('orders', this)">📦 Orders</button>
       <button class="nav-tab" onclick="switchTab('products', this)">🛍 Products</button>
+      <button class="nav-tab" onclick="switchTab('launches', this)">🚀 Launches</button>
       <button class="nav-tab" onclick="switchTab('promos', this)">🎁 Promos</button>
       <button class="nav-tab" onclick="switchTab('coupons', this)">🎟 Coupons</button>
       <button class="nav-tab" onclick="switchTab('production', this)">🏭 Production</button>
@@ -575,6 +600,20 @@ body {
       <p style="color:var(--text2);font-size:0.88rem;margin-bottom:1.5rem;">Daily production tracking. Check off tasks as you complete them. Resets on page reload.</p>
       <div class="checklist-grid" id="production-grid">
         <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- ── LAUNCHES TAB ── -->
+    <div class="tab-content" id="tab-launches">
+      <div class="tab-header-row">
+        <div>
+          <h2 class="tab-title">🚀 Featured Launches</h2>
+          <p class="tab-sub">Create limited-time combo launches, new product drops, and special offers shown as the hero feature on the store. Only one shows at a time — the most recent active one.</p>
+        </div>
+        <button class="action-btn primary" onclick="openLaunchModal()">+ New Launch</button>
+      </div>
+      <div class="mgmt-grid" id="launches-grid">
+        <div class="empty-state"><div class="icon">⏳</div><p>Loading...</p></div>
       </div>
     </div>
 
@@ -691,6 +730,78 @@ body {
   </div>
 </div>
 
+<!-- LAUNCH MODAL -->
+<div class="modal-overlay" id="launch-modal">
+  <div class="modal-box" style="max-width:580px;">
+    <div class="modal-head">
+      <h3 id="launch-modal-title">New Launch</h3>
+      <button class="close-btn" onclick="closeLaunchModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="lm-id">
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Eyebrow Label *</label>
+          <input type="text" class="form-input" id="lm-eyebrow" placeholder="e.g. 🎉 Grand Opening  or  🚀 New Launch">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Title *</label>
+          <input type="text" class="form-input" id="lm-title" placeholder="e.g. Grand Opening Combo">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Highlight Word (last word in title coloured red)</label>
+          <input type="text" class="form-input" id="lm-titlehl" placeholder="e.g. Combo">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Subtitle / Tagline</label>
+          <input type="text" class="form-input" id="lm-subtitle" placeholder="e.g. Everything you need to taste Thoothukudi in one box.">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Image Filename *</label>
+          <input type="text" class="form-input" id="lm-img" placeholder="e.g. combo1.jpeg">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">What's Included (one item per line)</label>
+        <textarea class="form-input" id="lm-items" rows="5" placeholder="100g Original Tuty Macroon&#10;3 Pieces Groundnut Balls&#10;200g Authentic Mixture&#10;100g Salted Groundnuts&#10;200g Uruttu Porikadalai"></textarea>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Selling Price ₹ *</label>
+          <input type="number" class="form-input" id="lm-price" placeholder="319" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">MRP ₹</label>
+          <input type="number" class="form-input" id="lm-mrp" placeholder="399" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Variant Label</label>
+          <input type="text" class="form-input" id="lm-variant" placeholder="e.g. 1 Pack">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ends At (leave blank = no timer)</label>
+          <input type="datetime-local" class="form-input" id="lm-ends">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Stock (0 = unlimited)</label>
+          <input type="number" class="form-input" id="lm-stock-total" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Remaining Stock</label>
+          <input type="number" class="form-input" id="lm-stock-left" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <label class="form-check">
+        <input type="checkbox" id="lm-active" checked> Launch is Active (visible on store)
+      </label>
+      <button class="btn-save" id="lm-save-btn" onclick="saveLaunch()">Save Launch</button>
+    </div>
+  </div>
+</div>
+
 <!-- PROMO MODAL -->
 <div class="modal-overlay" id="promo-modal">
   <div class="modal-box" style="max-width:480px;">
@@ -794,7 +905,7 @@ const STORE = {
   addr: "Thoothukudi, Tamil Nadu – 628008", phone: "+91 9442953995",
   email: "support@aathissnaacks.com",
   fssai: "12422029000996", pln: "TNTTN3407",
-  udyam: "UDYAM-TN-26-0089769", upi: "9442953995@okbuzaxis"
+  udyam: "UDYAM-TN-26-0089769", upi: "9442953995@okbizaxis"
 };
 
 let allOrders = [], allProducts = [], allPromos = [], allCoupons = [];
@@ -838,7 +949,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initAdmin() {
-  await Promise.all([loadOrders(), loadProducts(), loadPromos(), loadCoupons()]);
+  await Promise.all([loadOrders(), loadProducts(), loadLaunches(), loadPromos(), loadCoupons()]);
   renderProduction();
 }
 
@@ -856,17 +967,44 @@ function switchTab(name, btn) {
 // ORDERS
 // ══════════════════════════════════════
 async function loadOrders() {
-  showToast('Loading orders...', '');
-  let fbOrders = null;
-  if (window.firebaseGetOrders) fbOrders = await window.firebaseGetOrders();
-  const local = JSON.parse(localStorage.getItem('as_orders') || '[]');
-  if (fbOrders && fbOrders.length > 0) {
-    const fbIds = new Set(fbOrders.map(o => o.id));
-    allOrders = [...fbOrders, ...local.filter(o => !fbIds.has(o.id))];
-  } else { allOrders = local; }
-  allOrders.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
-  updateStats(); renderOrders(allOrders);
-  showToast(`${allOrders.length} orders loaded`, 'success');
+  const tbody = document.getElementById('orders-tbody');
+  tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">⏳</div><p>Loading from Firebase...</p></div></td></tr>';
+
+  // Wait for Firebase module to be ready (it's a type=module script)
+  const waitForFirebase = () => new Promise(resolve => {
+    if (window.firebaseGetOrders) return resolve();
+    let attempts = 0;
+    const t = setInterval(() => {
+      attempts++;
+      if (window.firebaseGetOrders || attempts > 30) { clearInterval(t); resolve(); }
+    }, 200);
+  });
+
+  await waitForFirebase();
+
+  if (!window.firebaseGetOrders) {
+    showToast('Firebase not ready — check connection', 'error');
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">⚠️</div><p>Firebase not connected. Check console.</p></div></td></tr>';
+    return;
+  }
+
+  try {
+    const fbOrders = await window.firebaseGetOrders();
+    if (fbOrders === null) {
+      // Firebase failed — show error, don't show local orders
+      showToast('Failed to load from Firebase — check rules', 'error');
+      tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">⚠️</div><p>Could not load orders from Firebase.<br><small>Check Firestore rules — orders need <code>allow read: if true</code></small></p></div></td></tr>';
+      return;
+    }
+    allOrders = fbOrders; // Firebase is sole source of truth
+    allOrders.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
+    updateStats();
+    renderOrders(allOrders);
+    showToast(`${allOrders.length} order${allOrders.length !== 1 ? 's' : ''} loaded`, 'success');
+  } catch(e) {
+    console.error('[Admin] loadOrders error:', e);
+    showToast('Error loading orders: ' + e.message, 'error');
+  }
 }
 
 function updateStats() {
@@ -929,15 +1067,25 @@ function filterOrders() {
 
 async function updateStatus(orderId, newStatus) {
   if (!newStatus) return;
-  const idx = allOrders.findIndex(o => o.id===orderId);
-  if (idx===-1) return;
+  const idx = allOrders.findIndex(o => o.id === orderId);
+  if (idx === -1) return;
+
+  // Update in memory immediately for responsive UI
   allOrders[idx].status = newStatus;
-  const local = JSON.parse(localStorage.getItem('as_orders')||'[]');
-  const li = local.findIndex(o => o.id===orderId);
-  if (li!==-1) { local[li].status = newStatus; localStorage.setItem('as_orders', JSON.stringify(local)); }
-  if (window.firebaseUpdateOrder) await window.firebaseUpdateOrder(orderId, {status:newStatus, updatedAt:new Date().toISOString()});
-  updateStats(); renderOrders(allOrders);
-  showToast(`Order → ${statusLabel(newStatus)}`, 'success');
+  updateStats();
+  renderOrders(allOrders);
+
+  // Push to Firebase — single source of truth
+  if (window.firebaseUpdateOrder) {
+    const ok = await window.firebaseUpdateOrder(orderId, { status: newStatus, updatedAt: new Date().toISOString() });
+    if (ok) {
+      showToast(`Order → ${statusLabel(newStatus)}`, 'success');
+    } else {
+      showToast('Firebase update failed — check connection', 'error');
+      // Revert in memory
+      allOrders[idx].status = allOrders[idx].status;
+    }
+  }
 }
 
 function viewScreenshot(orderId) {
@@ -994,6 +1142,163 @@ function exportCSV() {
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
   a.download = `orders-${new Date().toISOString().slice(0,10)}.csv`; a.click();
   showToast('CSV exported!','success');
+}
+
+// ══════════════════════════════════════
+// LAUNCHES MANAGEMENT
+// ══════════════════════════════════════
+let allLaunches = [];
+let editingLaunchId = null;
+
+async function loadLaunches() {
+  try {
+    if (window.firebaseGetCollection) allLaunches = await window.firebaseGetCollection('launches') || [];
+    else allLaunches = [];
+  } catch(e) { allLaunches = []; }
+  renderLaunchesMgmt();
+}
+
+function renderLaunchesMgmt() {
+  const grid = document.getElementById('launches-grid');
+  if (!allLaunches.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="icon">🚀</div>
+      <p>No launches yet.</p>
+      <p style="font-size:0.82rem;color:#bbb;margin-top:0.5rem;">Create one to replace the Grand Opening Combo section on the store.</p>
+    </div>`;
+    return;
+  }
+  const now = Date.now();
+  grid.innerHTML = allLaunches.map(l => {
+    const expired  = l.endsAt && new Date(l.endsAt).getTime() < now;
+    const isLive   = l.active !== false && !expired;
+    const hasTimer = !!l.endsAt;
+    const hasStock = l.stockTotal > 0;
+    const stockPct = hasStock ? Math.round((l.stockLeft / l.stockTotal) * 100) : 100;
+    const endsStr  = l.endsAt ? new Date(l.endsAt).toLocaleString('en-IN') : 'No end date';
+
+    return `
+    <div class="pm-card">
+      <div class="pm-card-img" style="height:160px;">
+        <img src="${l.img||'combo1.jpeg'}" alt="${l.title}"
+          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 160%22><rect width=%22300%22 height=%22160%22 fill=%22%23f5f5f0%22/><text x=%22150%22 y=%2290%22 text-anchor=%22middle%22 font-size=%2240%22>🚀</text></svg>'">
+        <span class="pm-card-status ${isLive?'on':'off'}">${isLive?'● Live':expired?'Expired':'Off'}</span>
+      </div>
+      <div class="pm-card-body">
+        <div class="pm-card-tag">${l.eyebrow||'Launch'}</div>
+        <div class="pm-card-name">${l.title}</div>
+        <div class="pm-card-variants" style="margin-bottom:0.4rem;">
+          ₹${l.price}${l.mrp?` (MRP ₹${l.mrp})`:''}
+          ${hasStock ? ` · Stock: ${l.stockLeft}/${l.stockTotal}` : ' · Unlimited stock'}
+        </div>
+        ${hasTimer ? `
+        <div style="margin-bottom:0.6rem;">
+          <div style="font-size:0.7rem;color:#888;margin-bottom:0.3rem;">⏳ ${expired?'Ended':'Ends'}: ${endsStr}</div>
+          ${!expired ? `<div style="height:4px;background:#eee;border-radius:99px;overflow:hidden;"><div style="width:${Math.max(5,Math.round(Math.max(0,new Date(l.endsAt)-now)/Math.max(1,new Date(l.endsAt)-(l.createdAt?new Date(l.createdAt):now-86400000))*100))}%;height:100%;background:var(--red);border-radius:99px;"></div></div>` : ''}
+        </div>` : ''}
+        ${hasStock && !expired ? `
+        <div style="margin-bottom:0.6rem;">
+          <div style="font-size:0.7rem;color:#888;margin-bottom:0.3rem;">Stock: ${stockPct}% remaining</div>
+          <div style="height:4px;background:#eee;border-radius:99px;overflow:hidden;"><div style="width:${stockPct}%;height:100%;background:${stockPct<20?'var(--red)':'var(--green)'};border-radius:99px;"></div></div>
+        </div>` : ''}
+        <div class="pm-card-actions">
+          <button class="action-btn primary" onclick="openLaunchModal('${l.id}')">✏️ Edit</button>
+          <button class="action-btn" onclick="toggleLaunch('${l.id}')">${l.active?'⏸ Pause':'▶ Activate'}</button>
+          <button class="action-btn" style="color:#dc2626;border-color:#dc2626;" onclick="deleteLaunch('${l.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openLaunchModal(lid) {
+  editingLaunchId = lid || null;
+  document.getElementById('launch-modal-title').textContent = lid ? 'Edit Launch' : 'New Launch';
+  if (lid) {
+    const l = allLaunches.find(x => x.id === lid); if (!l) return;
+    document.getElementById('lm-id').value       = l.id;
+    document.getElementById('lm-eyebrow').value  = l.eyebrow || '';
+    document.getElementById('lm-title').value    = l.title || '';
+    document.getElementById('lm-titlehl').value  = l.titleHl || '';
+    document.getElementById('lm-subtitle').value = l.subtitle || '';
+    document.getElementById('lm-img').value      = l.img || '';
+    document.getElementById('lm-items').value    = Array.isArray(l.items) ? l.items.join('\n') : (l.items || '');
+    document.getElementById('lm-price').value    = l.price || '';
+    document.getElementById('lm-mrp').value      = l.mrp || '';
+    document.getElementById('lm-variant').value  = l.variantLabel || '1 Pack';
+    document.getElementById('lm-ends').value     = l.endsAt ? new Date(l.endsAt).toISOString().slice(0,16) : '';
+    document.getElementById('lm-stock-total').value = l.stockTotal || 0;
+    document.getElementById('lm-stock-left').value  = l.stockLeft  || 0;
+    document.getElementById('lm-active').checked = l.active !== false;
+  } else {
+    ['lm-id','lm-eyebrow','lm-title','lm-titlehl','lm-subtitle','lm-img','lm-items','lm-price','lm-mrp','lm-ends'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('lm-variant').value = '1 Pack';
+    document.getElementById('lm-stock-total').value = 0;
+    document.getElementById('lm-stock-left').value  = 0;
+    document.getElementById('lm-active').checked = true;
+  }
+  document.getElementById('launch-modal').classList.add('open');
+}
+function closeLaunchModal() { document.getElementById('launch-modal').classList.remove('open'); }
+
+async function saveLaunch() {
+  const btn = document.getElementById('lm-save-btn');
+  const title = document.getElementById('lm-title').value.trim();
+  const price = parseFloat(document.getElementById('lm-price').value);
+  const img   = document.getElementById('lm-img').value.trim();
+  if (!title || !price || !img) { showToast('Title, image and price are required', 'error'); return; }
+
+  const endsVal = document.getElementById('lm-ends').value;
+  const itemsRaw = document.getElementById('lm-items').value.trim();
+
+  const data = {
+    eyebrow:      document.getElementById('lm-eyebrow').value.trim(),
+    title, titleHl: document.getElementById('lm-titlehl').value.trim(),
+    subtitle:     document.getElementById('lm-subtitle').value.trim(),
+    img, price,
+    mrp:          parseFloat(document.getElementById('lm-mrp').value) || 0,
+    variantLabel: document.getElementById('lm-variant').value.trim() || '1 Pack',
+    items:        itemsRaw ? itemsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [],
+    endsAt:       endsVal ? new Date(endsVal).toISOString() : null,
+    stockTotal:   parseInt(document.getElementById('lm-stock-total').value) || 0,
+    stockLeft:    parseInt(document.getElementById('lm-stock-left').value)  || 0,
+    active:       document.getElementById('lm-active').checked,
+    createdAt:    new Date().toISOString()
+  };
+
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    if (editingLaunchId) {
+      data.id = editingLaunchId;
+      const idx = allLaunches.findIndex(l => l.id === editingLaunchId);
+      if (idx !== -1) allLaunches[idx] = data;
+      if (window.firebaseSetDoc) await window.firebaseSetDoc('launches', editingLaunchId, data);
+    } else {
+      data.id = 'launch_' + Date.now();
+      allLaunches.push(data);
+      if (window.firebaseSetDoc) await window.firebaseSetDoc('launches', data.id, data);
+    }
+    showToast('Launch saved! 🚀', 'success');
+    closeLaunchModal();
+    renderLaunchesMgmt();
+  } catch(e) { showToast('Save failed: ' + e.message, 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Launch';
+}
+
+async function toggleLaunch(lid) {
+  const l = allLaunches.find(x => x.id === lid); if (!l) return;
+  l.active = !l.active;
+  if (window.firebaseSetDoc) await window.firebaseSetDoc('launches', lid, l);
+  renderLaunchesMgmt();
+  showToast(l.active ? '🚀 Launch activated on store' : 'Launch paused', 'success');
+}
+
+async function deleteLaunch(lid) {
+  if (!confirm('Delete this launch? This cannot be undone.')) return;
+  allLaunches = allLaunches.filter(l => l.id !== lid);
+  if (window.firebaseDeleteDoc) await window.firebaseDeleteDoc('launches', lid);
+  renderLaunchesMgmt();
+  showToast('Launch deleted', 'success');
 }
 
 // ══════════════════════════════════════
@@ -1722,10 +2027,11 @@ function showToast(msg, type='') {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 document.addEventListener('keydown', e => {
-  if (e.key==='Escape') { closeDetail(); closeProductModal(); closePromoModal(); closeCouponModal(); }
+  if (e.key==='Escape') { closeDetail(); closeProductModal(); closeLaunchModal(); closePromoModal(); closeCouponModal(); }
 });
 [document.getElementById('detail-modal'), document.getElementById('product-modal'),
- document.getElementById('promo-modal'), document.getElementById('coupon-modal')].forEach(m => {
+ document.getElementById('launch-modal'), document.getElementById('promo-modal'),
+ document.getElementById('coupon-modal')].forEach(m => {
   if (m) m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); });
 });
 </script>
