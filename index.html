@@ -23,14 +23,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <!-- Firebase -->
+<!-- Firebase: single unified module — orders + store config -->
 <script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getFirestore, collection, addDoc, getDocs,
+    doc, updateDoc, serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  // ============================================================
-  // REPLACE WITH YOUR FIREBASE CONFIG
-  // Go to: console.firebase.google.com > Project Settings > Your Apps > Web App
-  // ============================================================
   const firebaseConfig = {
     apiKey: "AIzaSyAHhL0lvpP5faVHGcKO1g-0R0YknbkNK48",
     authDomain: "aathissnaacks.firebaseapp.com",
@@ -43,49 +43,92 @@
 
   let db = null;
   try {
-    const app = initializeApp(firebaseConfig);
+    const apps = getApps();
+    const app = apps.length ? apps[0] : initializeApp(firebaseConfig);
     db = getFirestore(app);
-    console.log('Firebase connected');
+    console.log('[Firebase] connected ✅');
   } catch(e) {
-    console.warn('Firebase not configured yet — orders will be stored locally.');
+    console.error('[Firebase] init failed:', e);
   }
 
+  // ── strip adminKey from store reads ──
+  function clean(docs) {
+    return docs.map(d => {
+      const obj = { id: d.id, ...d.data() };
+      delete obj.adminKey;
+      return obj;
+    });
+  }
+
+  // ── SAVE ORDER ──
   window.saveOrderToFirebase = async function(orderData) {
-    if (!db) {
-      // Fallback: store in localStorage
+    // Always save to localStorage as backup first
+    const saveLocal = (data, id) => {
       const orders = JSON.parse(localStorage.getItem('as_orders') || '[]');
-      orderData.id = 'ORD' + Date.now();
-      orderData.createdAt = new Date().toISOString();
-      orderData.status = 'pending_payment';
-      orders.push(orderData);
+      data.id = id;
+      data.createdAt = new Date().toISOString();
+      data.status = 'pending_payment';
+      // avoid duplicates
+      if (!orders.find(o => o.id === id)) orders.push(data);
       localStorage.setItem('as_orders', JSON.stringify(orders));
-      return orderData.id;
+    };
+
+    if (!db) {
+      console.warn('[Firebase] No db — saving to localStorage only');
+      const id = 'ORD' + Date.now();
+      saveLocal(orderData, id);
+      return id;
     }
+
     try {
       const ref = await addDoc(collection(db, 'orders'), {
         ...orderData,
         status: 'pending_payment',
         createdAt: serverTimestamp()
       });
-      // Also save locally as backup
-      const orders = JSON.parse(localStorage.getItem('as_orders') || '[]');
-      orderData.id = ref.id;
-      orderData.createdAt = new Date().toISOString();
-      orderData.status = 'pending_payment';
-      orders.push(orderData);
-      localStorage.setItem('as_orders', JSON.stringify(orders));
+      console.log('[Firebase] Order saved to Firestore:', ref.id);
+      saveLocal(orderData, ref.id);
       return ref.id;
     } catch(e) {
-      console.error('Firebase save failed, using localStorage', e);
-      const orders = JSON.parse(localStorage.getItem('as_orders') || '[]');
-      orderData.id = 'ORD' + Date.now();
-      orderData.createdAt = new Date().toISOString();
-      orderData.status = 'pending_payment';
-      orders.push(orderData);
-      localStorage.setItem('as_orders', JSON.stringify(orders));
-      return orderData.id;
+      console.error('[Firebase] Order save failed:', e.code, e.message);
+      const id = 'ORD' + Date.now();
+      saveLocal(orderData, id);
+      return id;
     }
   };
+
+  // ── UPDATE ORDER (screenshot etc) ──
+  window._fbUpdateOrder = async function(orderId, data) {
+    if (!db || orderId.startsWith('ORD')) return; // local-only order
+    try {
+      await updateDoc(doc(db, 'orders', orderId), data);
+      console.log('[Firebase] Order updated:', orderId);
+    } catch(e) { console.error('[Firebase] updateOrder error:', e.code, e.message); }
+  };
+
+  // ── LOAD STORE CONFIG (products, promos, coupons, launches) ──
+  window._fbGetStoreConfig = async function() {
+    if (!db) { console.warn('[Firebase] No db for store config'); return {}; }
+    const result = {};
+    const collections = ['products', 'promos', 'coupons', 'launches'];
+    for (const col of collections) {
+      try {
+        const snap = await getDocs(collection(db, col));
+        console.log(`[Firebase] ${col} fetched: ${snap.size}`);
+        if (snap.size > 0) result[col] = clean(snap.docs);
+        else result[col] = [];
+      } catch(e) {
+        console.error(`[Firebase] ${col} fetch error:`, e.code, e.message);
+        result[col] = [];
+      }
+    }
+    return result;
+  };
+
+  // ── Signal ready ──
+  window._fbReady = true;
+  console.log('[Firebase] module ready, signalling store');
+  if (window._fbReadyCallback) window._fbReadyCallback();
 </script>
 
 <style>
@@ -548,16 +591,6 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 }
 .copy-btn { background: var(--dark); color: #fff; border: none; border-radius: 6px; padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; }
 .copy-btn:hover { background: var(--red); }
-.upi-apps { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.upi-app-btn {
-  border: 1.5px solid #e5e5e5; background: #fff;
-  border-radius: 0.75rem; padding: 0.6rem 1.2rem;
-  font-size: 0.85rem; font-weight: 600; cursor: pointer;
-  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
-  display: flex; align-items: center; gap: 0.4rem;
-  text-decoration: none; color: var(--dark);
-}
-.upi-app-btn:hover { border-color: var(--red); color: var(--red); }
 .upload-area {
   border: 2px dashed #e5e5e5; border-radius: 1rem;
   padding: 1.5rem; margin-bottom: 1.5rem;
@@ -602,6 +635,119 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
   .form-row, .form-row-3 { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; text-align: center; }
 }
+
+/* ─── LAUNCH / FEATURED SECTION ─── */
+.launch-section {
+  background: #fff;
+  padding: 5rem 1.5rem;
+}
+.launch-card {
+  max-width: 1100px; margin: auto;
+  border-radius: 2rem; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.1);
+  border: 2px solid var(--border);
+  position: relative;
+}
+@media (max-width: 768px) { .launch-card { grid-template-columns: 1fr; } }
+
+.launch-img-side {
+  overflow: hidden; background: #f5f5f0;
+  min-height: 320px; position: relative;
+}
+.launch-img-side img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.6s ease;
+}
+.launch-card:hover .launch-img-side img { transform: scale(1.04); }
+
+/* countdown urgency bar */
+.launch-urgency-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  background: var(--red); color: #fff;
+  padding: 0.5rem 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+  font-family: 'DM Sans', sans-serif;
+  z-index: 2;
+}
+.launch-timer-digits {
+  background: rgba(0,0,0,0.25); border-radius: 0.4rem;
+  padding: 0.2rem 0.6rem; font-family: 'DM Mono', monospace;
+  font-size: 0.9rem; letter-spacing: 0.1em;
+}
+
+.launch-content {
+  padding: 2.5rem 2.5rem 2.5rem;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--cream);
+}
+.launch-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(192,64,0,0.1); border: 1px solid rgba(192,64,0,0.2);
+  color: var(--red); font-size: 0.65rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 0.3rem 0.9rem; border-radius: 999px;
+  margin-bottom: 1rem; font-family: 'DM Sans', sans-serif;
+  width: fit-content;
+}
+.launch-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  line-height: 1.15; color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+.launch-title .hl { color: var(--red); }
+.launch-subtitle {
+  font-size: 0.92rem; color: #777; margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+.launch-items {
+  list-style: none; margin-bottom: 1.5rem;
+  border: 1px solid var(--border); border-radius: 0.75rem;
+  overflow: hidden; background: #fff;
+}
+.launch-items li {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.55rem 1rem; font-size: 0.88rem; color: #555;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.launch-items li:last-child { border: none; }
+.launch-chk { color: var(--red); font-size: 0.85rem; flex-shrink: 0; }
+
+.launch-price-row {
+  display: flex; align-items: center; gap: 1rem;
+  background: #fff; border-radius: 1rem;
+  padding: 0.85rem 1.25rem; margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+}
+.launch-price-main { font-size: 2rem; font-weight: 900; color: var(--dark); font-family: 'DM Sans', sans-serif; }
+.launch-price-old  { font-size: 0.85rem; color: #aaa; text-decoration: line-through; font-family: 'DM Sans', sans-serif; }
+.launch-save-badge {
+  background: rgba(192,64,0,0.1); color: var(--red);
+  padding: 0.3rem 0.85rem; border-radius: 999px;
+  font-weight: 700; font-size: 0.82rem;
+  font-family: 'DM Sans', sans-serif; margin-left: auto;
+}
+
+/* stock bar */
+.launch-stock-wrap { margin-bottom: 1.25rem; }
+.launch-stock-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.launch-stock-bar { height: 6px; background: #eee; border-radius: 999px; overflow: hidden; }
+.launch-stock-fill { height: 100%; background: var(--red); border-radius: 999px; transition: width 1s ease; }
+
+.launch-cta {
+  width: 100%; padding: 1rem; border: none; border-radius: 999px;
+  background: var(--dark); color: #fff;
+  font-weight: 700; font-size: 1rem; cursor: pointer;
+  transition: all 0.25s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.launch-cta:hover { background: var(--red); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(192,64,0,0.3); }
+.launch-ended { text-align: center; padding: 1rem; color: #aaa; font-size: 0.9rem; }
+
+/* ─── COMBO SECTION (kept for CSS compat) ─── */
+.combo-section { background: #fff; padding: 5rem 1.5rem; }
 
 /* ─── PROMO BANNER ─── */
 #promos-banner { border-bottom: 1px solid var(--border); }
@@ -692,69 +838,6 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
   </div>
 </div>
 
-<!-- Firebase Store Config Loader (products, promos, coupons) -->
-<script type="module">
-  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, collection, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAHhL0lvpP5faVHGcKO1g-0R0YknbkNK48",
-    authDomain: "aathissnaacks.firebaseapp.com",
-    databaseURL: "https://aathissnaacks-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "aathissnaacks",
-    storageBucket: "aathissnaacks.firebasestorage.app",
-    messagingSenderId: "572578174994",
-    appId: "1:572578174994:web:fb86c560429dc8b0ea20cb"
-  };
-
-  let db;
-  try {
-    const apps = getApps();
-    const app = apps.length ? apps[0] : initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    console.log('[Store] Firebase connected');
-  } catch(e) { console.warn('[Store] Firebase init failed', e); }
-
-  // strip adminKey field added by admin panel before using on store
-  function clean(docs) {
-    return docs.map(d => {
-      const obj = { id: d.id, ...d.data() };
-      delete obj.adminKey;
-      return obj;
-    });
-  }
-
-  window._fbGetStoreConfig = async function() {
-    if (!db) { console.warn('[Store] No db'); return {}; }
-    const result = {};
-    try {
-      const pSnap = await getDocs(collection(db, 'products'));
-      console.log('[Store] products fetched:', pSnap.size);
-      if (!pSnap.empty) result.products = clean(pSnap.docs);
-    } catch(e) { console.error('[Store] products fetch error:', e.code, e.message); }
-    try {
-      const promoSnap = await getDocs(collection(db, 'promos'));
-      console.log('[Store] promos fetched:', promoSnap.size);
-      result.promos = clean(promoSnap.docs);
-    } catch(e) { console.error('[Store] promos fetch error:', e.code, e.message); }
-    try {
-      const couponSnap = await getDocs(collection(db, 'coupons'));
-      console.log('[Store] coupons fetched:', couponSnap.size);
-      result.coupons = clean(couponSnap.docs);
-    } catch(e) { console.error('[Store] coupons fetch error:', e.code, e.message); }
-    return result;
-  };
-
-  window._fbUpdateOrder = async function(orderId, data) {
-    if (!db) return;
-    try { await updateDoc(doc(db, 'orders', orderId), data); } catch(e) { console.error('[Store] updateOrder error:', e); }
-  };
-
-  // Signal that Firebase module is ready — DOMContentLoaded may have already fired
-  window._fbReady = true;
-  if (window._fbReadyCallback) window._fbReadyCallback();
-</script>
-
 <!-- PROMOS BANNER -->
 <div id="promos-banner" style="display:none; background:#fff8ee; padding:1rem 1.5rem;">
   <!-- Injected by JS -->
@@ -787,41 +870,11 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 </section>
 
 <!-- ═══════════════════════════════════════
-     COMBO OFFER
+     FEATURED LAUNCH (dynamic — admin controlled)
 ════════════════════════════════════════ -->
-<section class="combo-section" aria-label="Grand Opening Combo">
-  <div class="section-head reveal">
-    <h2 data-lang="en">Grand Opening <span style="color:var(--red)">Combo</span></h2>
-    <h2 class="font-ta" data-lang="ta" style="display:none">சிறப்பு தொடக்க <span style="color:var(--red)">காம்போ</span></h2>
-    <div class="section-divider"></div>
-  </div>
-  <div class="combo-card reveal">
-    <div class="combo-img-side">
-      <img src="combo1.jpeg" alt="Grand Opening Combo" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect width=%22200%22 height=%22200%22 fill=%22%23f5f5f0%22/><text x=%22100%22 y=%22110%22 text-anchor=%22middle%22 font-size=%2250%22>🎁</text></svg>'">
-    </div>
-    <div class="combo-content">
-      <h3 data-lang="en">The Grand <span style="color:var(--red)">Opening Combo</span></h3>
-      <h3 class="font-ta" data-lang="ta" style="display:none">சிறப்பு <span style="color:var(--red)">தொடக்க காம்போ</span></h3>
-      <ul class="combo-items">
-        <li><span class="chk">✔</span><span data-lang="en">100g Original Tuty Macroon</span><span class="font-ta" data-lang="ta" style="display:none">100g தூத்துக்குடி மக்ரூன்</span></li>
-        <li><span class="chk">✔</span><span data-lang="en">3 Pieces Groundnut Balls</span><span class="font-ta" data-lang="ta" style="display:none">3 கடலை உருண்டை</span></li>
-        <li><span class="chk">✔</span><span data-lang="en">200g Authentic Mixture</span><span class="font-ta" data-lang="ta" style="display:none">200g மிக்சர்</span></li>
-        <li><span class="chk">✔</span><span data-lang="en">100g Salted Groundnuts</span><span class="font-ta" data-lang="ta" style="display:none">100g வறுத்த நிலக்கடலை</span></li>
-        <li><span class="chk">✔</span><span data-lang="en">200g Uruttu Porikadalai</span><span class="font-ta" data-lang="ta" style="display:none">200g உருட்டு பொரிகடலை</span></li>
-      </ul>
-      <div class="combo-price-row">
-        <div>
-          <div class="combo-price-old">MRP ₹399</div>
-          <div class="combo-price-main">₹319</div>
-        </div>
-        <div class="combo-save-badge">Save ₹80</div>
-      </div>
-      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="addToCart('combo1', 'Grand Opening Combo', 319, 'combo1.jpeg', '5-item combo pack')">
-        🛒 <span data-lang="en">Add to Cart</span><span class="font-ta" data-lang="ta" style="display:none">கார்ட்டில் சேர்</span>
-      </button>
-    </div>
-  </div>
-</section>
+<div id="launch-section" style="display:none;">
+  <!-- Injected by renderLaunch() -->
+</div>
 
 <!-- ═══════════════════════════════════════
      PRODUCTS
@@ -1039,33 +1092,18 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
     <div class="modal-body">
       <p style="color:#888;font-size:0.85rem;margin-bottom:0.5rem;">Order <strong id="upi-order-id"></strong></p>
       <div class="upi-amount" id="upi-amount-display">₹0</div>
-      <p class="upi-note">Scan QR or use any UPI app to pay</p>
+      <p class="upi-note">Scan the QR code below with any UPI app to pay</p>
 
       <div class="upi-qr-wrap">
         <img id="upi-qr-img" src="" alt="UPI QR Code" width="200" height="200">
       </div>
 
       <div class="upi-id-box">
-        <span>9442953995@okbizaxis</span>
+        <span>9442953995@okbuzaxis</span>
         <button class="copy-btn" onclick="copyUPI()">Copy</button>
       </div>
 
-      <div class="upi-apps">
-        <a id="gpay-link" href="#" class="upi-app-btn" target="_blank">
-          <span>🟡</span> GPay
-        </a>
-        <a id="phonepe-link" href="#" class="upi-app-btn" target="_blank">
-          <span>🟣</span> PhonePe
-        </a>
-        <a id="paytm-link" href="#" class="upi-app-btn" target="_blank">
-          <span>🔵</span> Paytm
-        </a>
-        <a id="bhim-link" href="#" class="upi-app-btn" target="_blank">
-          <span>🟢</span> BHIM
-        </a>
-      </div>
-
-      <p style="font-size:0.85rem;color:#555;margin-bottom:0.75rem;font-weight:600;">After paying, upload screenshot as proof:</p>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.75rem;font-weight:600;">Upload payment screenshot (optional but recommended):</p>
       <div class="upload-area" id="upload-area">
         <input type="file" id="screenshot-input" accept="image/*" onchange="handleScreenshot(this)">
         <div class="upload-icon">📸</div>
@@ -1073,7 +1111,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
         <div class="upload-preview" id="upload-preview"></div>
       </div>
 
-      <button class="btn-confirm-pay" id="btn-confirm-pay" onclick="confirmPayment()" disabled>
+      <button class="btn-confirm-pay" id="btn-confirm-pay" onclick="confirmPayment()">
         ✅ Confirm & Submit Order
       </button>
       <p style="font-size:0.75rem;color:#aaa;margin-top:0.75rem;">Your order will be confirmed once we verify payment</p>
@@ -1104,7 +1142,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 // ══════════════════════════════════════════════════════════
 // STORE CONFIG
 // ══════════════════════════════════════════════════════════
-const UPI_ID = '9442953995@okbizaxis';
+const UPI_ID = '9442953995@okbuzaxis';
 const STORE_NAME = "Aathi's Snaacks";
 
 // ══════════════════════════════════════════════════════════
@@ -1167,6 +1205,7 @@ const DEFAULT_PRODUCTS = [
 let PRODUCTS = [...DEFAULT_PRODUCTS];
 let PROMOS   = [];   // [{id, title, subtitle, badge, bgColor, active, endsAt}]
 let COUPONS  = [];   // [{id, code, type:'percent'|'flat', value, minOrder, maxUses, usedCount, active, expiresAt}]
+let LAUNCHES = [];   // [{id, title, subtitle, eyebrow, img, items[], price, mrp, productId, variantIdx, stockTotal, stockLeft, endsAt, active}]
 
 let cart = JSON.parse(localStorage.getItem('as_cart') || '[]');
 let currentOrderId = null;
@@ -1221,11 +1260,13 @@ async function loadStoreConfig() {
     } else {
       console.log('[Store] no Firebase products — using defaults');
     }
-    if (config.promos)  PROMOS  = config.promos;
-    if (config.coupons) COUPONS = config.coupons;
+    if (config.promos)   PROMOS   = config.promos;
+    if (config.coupons)  COUPONS  = config.coupons;
+    if (config.launches) LAUNCHES = config.launches;
 
     renderProducts();
     renderPromos();
+    renderLaunch();
   } catch(e) {
     console.warn('[Store] loadStoreConfig failed, using defaults:', e);
   }
@@ -1248,6 +1289,168 @@ function setLang(l) {
     el.style.display = isTa ? (isBlock ? 'block' : 'inline') : 'none';
   });
   renderProducts(); // re-render product names in new language
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER LAUNCH / FEATURED SECTION
+// ══════════════════════════════════════════════════════════
+let _launchTimers = [];
+
+function renderLaunch() {
+  // clear any previous timers
+  _launchTimers.forEach(clearInterval);
+  _launchTimers = [];
+
+  const wrap = document.getElementById('launch-section');
+  if (!wrap) return;
+
+  const now = Date.now();
+
+  // Find active launches — not expired, active flag true
+  const active = LAUNCHES.filter(l =>
+    l.active !== false &&
+    (!l.endsAt || new Date(l.endsAt).getTime() > now)
+  );
+
+  // Also show the Grand Opening Combo as a default if no Firebase launches exist
+  if (!active.length) {
+    // Show built-in Grand Opening Combo as default launch
+    const defaultLaunch = {
+      id: 'default_combo',
+      eyebrow: '🎉 Grand Opening',
+      title: 'Grand Opening Combo',
+      titleHl: 'Combo',
+      subtitle: 'Everything you need to taste Thoothukudi in one box.',
+      img: 'combo1.jpeg',
+      items: [
+        '100g Original Tuty Macroon',
+        '3 Pieces Groundnut Balls',
+        '200g Authentic Mixture',
+        '100g Salted Groundnuts',
+        '200g Uruttu Porikadalai'
+      ],
+      price: 319, mrp: 399,
+      productId: 'combo1', variantLabel: '1 Pack',
+      endsAt: null,
+      stockTotal: 0, stockLeft: 0
+    };
+    renderOneLaunch(wrap, defaultLaunch);
+    return;
+  }
+
+  // Render the first active launch (most recent)
+  renderOneLaunch(wrap, active[0]);
+}
+
+function renderOneLaunch(wrap, l) {
+  const now = Date.now();
+  const hasTimer = l.endsAt && new Date(l.endsAt).getTime() > now;
+  const hasStock = l.stockTotal > 0;
+  const stockPct = hasStock ? Math.max(5, Math.round((l.stockLeft / l.stockTotal) * 100)) : 0;
+  const stockLow = hasStock && l.stockLeft <= Math.ceil(l.stockTotal * 0.2);
+
+  // Items list
+  const itemsArr = Array.isArray(l.items) ? l.items : (l.items || '').split('\n').filter(Boolean);
+  const itemsHtml = itemsArr.length ? `
+    <ul class="launch-items">
+      ${itemsArr.map(it => `<li><span class="launch-chk">✔</span>${it}</li>`).join('')}
+    </ul>` : '';
+
+  // Price row
+  const save = (l.mrp || 0) - (l.price || 0);
+  const priceHtml = `
+    <div class="launch-price-row">
+      <div>
+        ${l.mrp && l.mrp > l.price ? `<div class="launch-price-old">MRP ₹${l.mrp}</div>` : ''}
+        <div class="launch-price-main">₹${l.price}</div>
+      </div>
+      ${save > 0 ? `<div class="launch-save-badge">Save ₹${save}</div>` : ''}
+    </div>`;
+
+  // Stock bar
+  const stockHtml = hasStock ? `
+    <div class="launch-stock-wrap">
+      <div class="launch-stock-label">
+        <span>${stockLow ? '🔥 Almost Sold Out!' : 'Availability'}</span>
+        <span style="color:${stockLow?'var(--red)':'#888'}">${l.stockLeft} left of ${l.stockTotal}</span>
+      </div>
+      <div class="launch-stock-bar">
+        <div class="launch-stock-fill" id="launch-stock-fill" style="width:${stockPct}%;background:${stockLow?'var(--red)':'var(--green)'}"></div>
+      </div>
+    </div>` : '';
+
+  // Urgency bar (countdown)
+  const urgencyBar = hasTimer ? `
+    <div class="launch-urgency-bar">
+      <span>⏳ Offer ends in</span>
+      <span class="launch-timer-digits" id="launch-countdown">--:--:--</span>
+    </div>` : '';
+
+  // Split title at highlight word
+  const titleDisplay = l.titleHl
+    ? l.title.replace(l.titleHl, `<span class="hl">${l.titleHl}</span>`)
+    : `${l.title.split(' ').slice(0,-1).join(' ')} <span class="hl">${l.title.split(' ').slice(-1)}</span>`;
+
+  wrap.style.display = '';
+  wrap.innerHTML = `
+    <section class="launch-section" aria-label="Featured Launch">
+      <div class="section-head reveal" style="margin-bottom:2rem;">
+        <h2>Featured <span style="color:var(--red)">Launch</span></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="launch-card reveal">
+        <div class="launch-img-side">
+          ${urgencyBar}
+          <img src="${l.img || 'combo1.jpeg'}" alt="${l.title}" loading="lazy"
+            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 320%22><rect width=%22400%22 height=%22320%22 fill=%22%23f5f5f0%22/><text x=%22200%22 y=%22170%22 text-anchor=%22middle%22 font-size=%2260%22>🎁</text></svg>'"
+            style="margin-top:${hasTimer?'38px':'0'}">
+        </div>
+        <div class="launch-content">
+          <span class="launch-eyebrow">${l.eyebrow || '🚀 New Launch'}</span>
+          <h3 class="launch-title">${titleDisplay}</h3>
+          ${l.subtitle ? `<p class="launch-subtitle">${l.subtitle}</p>` : ''}
+          ${itemsHtml}
+          ${priceHtml}
+          ${stockHtml}
+          <button class="launch-cta" onclick="addLaunchToCart('${l.id}','${l.title}',${l.price},'${l.img||'combo1.jpeg'}','${l.variantLabel||'1 Pack'}')">
+            🛒 Add to Cart
+          </button>
+          ${hasTimer ? `<p style="font-size:0.72rem;color:#aaa;text-align:center;margin-top:0.75rem;">Limited time offer · Don't miss out</p>` : ''}
+        </div>
+      </div>
+    </section>`;
+
+  // Start countdown timer
+  if (hasTimer) {
+    const endsAt = new Date(l.endsAt).getTime();
+    const tick = () => {
+      const diff = endsAt - Date.now();
+      const el = document.getElementById('launch-countdown');
+      if (!el) return;
+      if (diff <= 0) {
+        el.textContent = 'ENDED';
+        wrap.style.display = 'none'; // hide section when expired
+        return;
+      }
+      const h  = Math.floor(diff / 3600000);
+      const m  = Math.floor((diff % 3600000) / 60000);
+      const s  = Math.floor((diff % 60000) / 1000);
+      const d  = Math.floor(h / 24);
+      if (d > 0) {
+        el.textContent = `${d}d ${h%24}h ${m}m`;
+      } else {
+        el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      }
+    };
+    tick();
+    _launchTimers.push(setInterval(tick, 1000));
+  }
+
+  initScrollReveal();
+}
+
+function addLaunchToCart(id, name, price, img, variant) {
+  addToCart('launch_' + id, name, price, img, variant);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1578,17 +1781,9 @@ function openUpiModal(amount, orderId) {
   const upiString = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(STORE_NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Order ' + orderId)}`;
   document.getElementById('upi-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
 
-  const eu = encodeURIComponent(UPI_ID);
-  const en = encodeURIComponent(STORE_NAME);
-  const et = encodeURIComponent('Order ' + orderId);
-  document.getElementById('gpay-link').href    = `tez://upi/pay?pa=${eu}&pn=${en}&am=${amount}&cu=INR&tn=${et}`;
-  document.getElementById('phonepe-link').href = `phonepe://pay?pa=${eu}&pn=${en}&am=${amount}&cu=INR&tn=${et}`;
-  document.getElementById('paytm-link').href   = `paytmmp://pay?pa=${eu}&pn=${en}&am=${amount}&cu=INR&tn=${et}`;
-  document.getElementById('bhim-link').href    = `upi://pay?pa=${eu}&pn=${en}&am=${amount}&cu=INR&tn=${et}`;
-
   screenshotBase64 = null;
   document.getElementById('upload-preview').innerHTML = '';
-  document.getElementById('btn-confirm-pay').disabled = true;
+  document.getElementById('btn-confirm-pay').disabled = false;
   document.getElementById('upi-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -1620,7 +1815,6 @@ function handleScreenshot(input) {
 }
 
 async function confirmPayment() {
-  if (!screenshotBase64) { showToast('Please upload payment screenshot', 'error'); return; }
   const btn = document.getElementById('btn-confirm-pay');
   btn.disabled = true; btn.textContent = 'Submitting...';
 
@@ -1628,14 +1822,15 @@ async function confirmPayment() {
     const orders = JSON.parse(localStorage.getItem('as_orders') || '[]');
     const idx = orders.findIndex(o => o.id === currentOrderId);
     if (idx !== -1) {
-      orders[idx].screenshot = screenshotBase64;
+      if (screenshotBase64) orders[idx].screenshot = screenshotBase64;
       orders[idx].status = 'payment_uploaded';
       orders[idx].paymentUploadedAt = new Date().toISOString();
       localStorage.setItem('as_orders', JSON.stringify(orders));
     }
-    // Also update Firebase
     if (window._fbUpdateOrder) {
-      await window._fbUpdateOrder(currentOrderId, { screenshot: screenshotBase64, status: 'payment_uploaded', paymentUploadedAt: new Date().toISOString() });
+      const updateData = { status: 'payment_uploaded', paymentUploadedAt: new Date().toISOString() };
+      if (screenshotBase64) updateData.screenshot = screenshotBase64;
+      await window._fbUpdateOrder(currentOrderId, updateData);
     }
   } catch(e) { console.error(e); }
 
