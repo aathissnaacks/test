@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Aathi's Snaacks | Traditional Indian Snack House</title>
+<meta name="description" content="Contact Aathi's Snaacks for orders, queries, or support. Reach us via WhatsApp, phone, or email. Based in Thoothukudi, Tamil Nadu.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.aathissnaacks.com/contact.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAFAF5; --red:#C04000; --gold:#D4AF37;
+  --dark:#1A1A1A; --cream:#FFF8EE; --border:rgba(212,175,55,0.25);
+  --text2:#6B7280; --green:#16a34a; --wa:#25D366;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--dark); line-height:1.7; }
+h1,h2,h3,h4 { font-family:'Playfair Display',serif; }
+a { color:var(--red); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* HEADER */
+.site-header { position:sticky; top:0; z-index:100; background:rgba(250,250,245,0.97); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); box-shadow:0 2px 20px rgba(0,0,0,0.06); }
+.header-inner { max-width:1100px; margin:auto; padding:0 1.5rem; height:68px; display:flex; align-items:center; justify-content:space-between; }
+.logo-wrap { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+.logo-img { width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); background:#fff; }
+.logo-text h1 { font-size:1.1rem; color:var(--dark); line-height:1.2; }
+.logo-text p { font-size:0.6rem; color:var(--red); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; font-family:'DM Sans',sans-serif; }
+.nav-links { display:flex; gap:1.5rem; align-items:center; }
+.nav-links a { font-size:0.88rem; font-weight:500; color:#555; transition:color 0.2s; }
+.nav-links a:hover,.nav-links a.active { color:var(--red); text-decoration:none; }
+.btn-shop { background:var(--dark); color:#fff !important; padding:0.55rem 1.25rem; border-radius:999px; font-size:0.85rem; font-weight:600; transition:background 0.2s; }
+.btn-shop:hover { background:var(--red); text-decoration:none; }
+
+/* HERO */
+.page-hero { background:var(--dark); color:#fff; padding:5rem 1.5rem 4rem; text-align:center; position:relative; overflow:hidden; }
+.page-hero::before { content:''; position:absolute; inset:0; opacity:0.04; background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='25' stroke='%23D4AF37' stroke-width='1' fill='none'/%3E%3C/svg%3E"); background-size:60px; }
+.page-hero-inner { position:relative; z-index:1; max-width:600px; margin:auto; }
+.hero-eyebrow { display:inline-block; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.3); color:var(--gold); font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; padding:0.35rem 1rem; border-radius:999px; margin-bottom:1.25rem; font-family:'DM Sans',sans-serif; }
+.page-hero h2 { font-size:clamp(2.2rem,5vw,3.2rem); margin-bottom:0.75rem; line-height:1.15; }
+.page-hero h2 span { color:var(--gold); }
+.page-hero p { color:#aaa; font-size:0.98rem; line-height:1.8; }
+
+/* MAIN LAYOUT */
+.contact-section { padding:5rem 1.5rem; }
+.contact-inner { max-width:1100px; margin:auto; display:grid; grid-template-columns:1fr 1.4fr; gap:4rem; align-items:start; }
+@media (max-width:900px) { .contact-inner { grid-template-columns:1fr; gap:3rem; } }
+
+/* CONTACT INFO */
+.contact-info { }
+.section-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--red); margin-bottom:0.6rem; }
+.contact-info h2 { font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:0.5rem; line-height:1.2; }
+.contact-divider { width:44px; height:3px; background:var(--gold); border-radius:2px; margin-bottom:1.5rem; }
+.contact-intro { font-size:0.95rem; color:var(--text2); margin-bottom:2rem; line-height:1.8; }
+
+.contact-cards { display:flex; flex-direction:column; gap:1rem; margin-bottom:2rem; }
+.contact-card { background:#fff; border:1px solid #eee; border-radius:1rem; padding:1.25rem 1.5rem; display:flex; align-items:flex-start; gap:1rem; box-shadow:0 2px 12px rgba(0,0,0,0.04); transition:box-shadow 0.2s; text-decoration:none; color:var(--dark); }
+.contact-card:hover { box-shadow:0 6px 24px rgba(0,0,0,0.1); text-decoration:none; }
+.cc-icon { width:44px; height:44px; border-radius:0.75rem; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.cc-icon.wa { background:rgba(37,211,102,0.12); }
+.cc-icon.phone { background:rgba(192,64,0,0.1); }
+.cc-icon.email { background:rgba(37,99,235,0.1); }
+.cc-icon.addr { background:rgba(212,175,55,0.15); }
+.cc-body { }
+.cc-label { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:0.2rem; }
+.cc-value { font-size:0.95rem; font-weight:600; color:var(--dark); margin-bottom:0.15rem; }
+.cc-note { font-size:0.78rem; color:#aaa; }
+
+/* HOURS */
+.hours-card { background:var(--cream); border:1px solid var(--border); border-radius:1rem; padding:1.25rem 1.5rem; }
+.hours-card h4 { font-size:0.85rem; font-weight:700; color:var(--dark); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
+.hours-row { display:flex; justify-content:space-between; font-size:0.88rem; padding:0.35rem 0; border-bottom:1px solid rgba(0,0,0,0.05); color:#555; }
+.hours-row:last-child { border:none; }
+.hours-row .day { font-weight:500; }
+.hours-row .time { color:var(--green); font-weight:600; }
+.hours-row .closed { color:#dc2626; font-weight:600; }
+
+/* FORM */
+.contact-form-wrap { background:#fff; border:1px solid #eee; border-radius:1.5rem; padding:2.5rem; box-shadow:0 4px 24px rgba(0,0,0,0.06); }
+.contact-form-wrap h3 { font-size:1.4rem; margin-bottom:0.35rem; }
+.form-subtitle { font-size:0.88rem; color:var(--text2); margin-bottom:2rem; }
+.form-group { margin-bottom:1.1rem; }
+.form-label { display:block; font-size:0.75rem; font-weight:700; color:#555; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.06em; }
+.form-input { width:100%; border:1.5px solid #e5e5e5; border-radius:0.75rem; padding:0.75rem 1rem; font-size:0.95rem; font-family:'DM Sans',sans-serif; outline:none; background:#fafafa; transition:border-color 0.2s,background 0.2s; }
+.form-input:focus { border-color:var(--red); background:#fff; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media (max-width:500px) { .form-row { grid-template-columns:1fr; } }
+.form-select { width:100%; border:1.5px solid #e5e5e5; border-radius:0.75rem; padding:0.75rem 1rem; font-size:0.95rem; font-family:'DM Sans',sans-serif; outline:none; background:#fafafa; cursor:pointer; }
+.form-select:focus { border-color:var(--red); }
+textarea.form-input { resize:vertical; min-height:120px; }
+.btn-submit { width:100%; background:var(--dark); color:#fff; border:none; border-radius:999px; padding:0.95rem; font-weight:700; font-size:1rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.25s; display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-top:0.5rem; }
+.btn-submit:hover { background:var(--red); transform:translateY(-1px); }
+.btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+.btn-wa-large { width:100%; background:var(--wa); color:#fff; border:none; border-radius:999px; padding:0.95rem; font-weight:700; font-size:1rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.25s; display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-top:0.75rem; text-decoration:none; }
+.btn-wa-large:hover { opacity:0.9; transform:translateY(-1px); text-decoration:none; }
+.or-divider { display:flex; align-items:center; gap:0.75rem; margin:1.25rem 0; color:#ccc; font-size:0.82rem; }
+.or-divider::before,.or-divider::after { content:''; flex:1; height:1px; background:#eee; }
+
+/* SUCCESS STATE */
+.form-success { display:none; text-align:center; padding:2rem; }
+.form-success .success-icon { font-size:3.5rem; margin-bottom:1rem; }
+.form-success h3 { font-size:1.4rem; color:var(--green); margin-bottom:0.5rem; }
+.form-success p { color:var(--text2); font-size:0.92rem; }
+
+/* FAQ */
+.faq-section { background:#fff; padding:5rem 1.5rem; }
+.faq-inner { max-width:760px; margin:auto; }
+.faq-head { text-align:center; margin-bottom:3rem; }
+.faq-head h2 { font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:0.5rem; }
+.faq-divider { width:44px; height:3px; background:var(--gold); border-radius:2px; margin:0 auto; }
+.faq-item { border:1px solid #eee; border-radius:1rem; margin-bottom:0.75rem; overflow:hidden; }
+.faq-q { width:100%; background:#fff; border:none; padding:1.1rem 1.5rem; text-align:left; font-size:0.95rem; font-weight:600; color:var(--dark); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:1rem; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+.faq-q:hover { background:#fafafa; }
+.faq-q.open { background:var(--cream); color:var(--red); }
+.faq-arrow { font-size:0.8rem; transition:transform 0.3s; flex-shrink:0; }
+.faq-q.open .faq-arrow { transform:rotate(180deg); }
+.faq-a { display:none; padding:0 1.5rem 1.25rem; font-size:0.92rem; color:#666; line-height:1.8; background:var(--cream); }
+.faq-a.open { display:block; }
+
+/* FOOTER */
+.site-footer { background:#0a0a0a; color:#fff; padding:2.5rem 1.5rem; border-top:4px solid var(--red); }
+.footer-inner { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.82rem; color:#555; }
+.footer-links { display:flex; gap:1.5rem; flex-wrap:wrap; }
+.footer-links a { color:#666; text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:#fff; }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(24px); transition:all 0.7s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity:1; transform:none; }
+.toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(100px); background:var(--dark); color:#fff; padding:0.75rem 1.5rem; border-radius:999px; font-size:0.9rem; font-weight:500; z-index:9999; transition:transform 0.35s cubic-bezier(0.16,1,0.3,1); white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-family:'DM Sans',sans-serif; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.success { background:var(--green); }
+.toast.error { background:#dc2626; }
+
+@media (max-width:640px) { .nav-links { display:none; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="logonobg.jpeg" alt="Aathi's Snaacks" class="logo-img" width="44" height="44"
+        onerror="this.style.background='#D4AF37';this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 44 44%22><text y=%2232%22 font-size=%2224%22>🍬</text></svg>'">
+      <div class="logo-text">
+        <h1>Aathi's Snaacks</h1>
+        <p>Aathi Shivaya Group of Companies</p>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+      <a href="index.html#products" class="btn-shop">Order Now</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="hero-eyebrow">We're here to help</div>
+    <h2>Get in <span>Touch</span></h2>
+    <p>Have a question about an order, a product, or just want to say hello? We'd love to hear from you. We typically respond within a few hours.</p>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+  <div class="contact-inner">
+
+    <!-- LEFT: INFO -->
+    <div class="contact-info reveal">
+      <div class="section-label">Contact Details</div>
+      <h2>Let's Talk</h2>
+      <div class="contact-divider"></div>
+      <p class="contact-intro">Whether you have a question about an order, want to place a bulk order, or need help with anything else — we're just a message away. The fastest way to reach us is WhatsApp.</p>
+
+      <div class="contact-cards">
+        <a href="https://wa.me/919342953995?text=Hi%2C%20I%20have%20a%20query%20about%20Aathi%27s%20Snaacks!" target="_blank" rel="noopener" class="contact-card">
+          <div class="cc-icon wa">💬</div>
+          <div class="cc-body">
+            <div class="cc-label">WhatsApp (Fastest)</div>
+            <div class="cc-value">+91 9342953995</div>
+            <div class="cc-note">Usually responds within 2 hours</div>
+          </div>
+        </a>
+        <a href="tel:+919342953995" class="contact-card">
+          <div class="cc-icon phone">📞</div>
+          <div class="cc-body">
+            <div class="cc-label">Phone</div>
+            <div class="cc-value">+91 9342953995</div>
+            <div class="cc-note">Mon – Sat, 9:00 AM – 6:00 PM IST</div>
+          </div>
+        </a>
+        <a href="mailto:support@aathissnaacks.com" class="contact-card">
+          <div class="cc-icon email">📧</div>
+          <div class="cc-body">
+            <div class="cc-label">Email</div>
+            <div class="cc-value">support@aathissnaacks.com</div>
+            <div class="cc-note">Response within 24 hours</div>
+          </div>
+        </a>
+        <div class="contact-card" style="cursor:default;">
+          <div class="cc-icon addr">📍</div>
+          <div class="cc-body">
+            <div class="cc-label">Address</div>
+            <div class="cc-value">Thoothukudi, Tamil Nadu</div>
+            <div class="cc-note">India – 628008</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hours-card">
+        <h4>🕐 Business Hours</h4>
+        <div class="hours-row"><span class="day">Monday – Friday</span><span class="time">9:00 AM – 6:00 PM</span></div>
+        <div class="hours-row"><span class="day">Saturday</span><span class="time">9:00 AM – 3:00 PM</span></div>
+        <div class="hours-row"><span class="day">Sunday</span><span class="closed">Closed</span></div>
+        <div class="hours-row" style="border:none;margin-top:0.5rem;"><span style="font-size:0.78rem;color:#aaa;">All times are Indian Standard Time (IST, UTC+5:30)</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="contact-form-wrap reveal">
+      <div id="form-wrap">
+        <h3>Send Us a Message</h3>
+        <p class="form-subtitle">Fill in the form below and we'll get back to you as soon as possible.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name *</label>
+            <input type="text" class="form-input" id="cf-name" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-input" id="cf-phone" placeholder="10-digit mobile" maxlength="10" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="cf-email" placeholder="optional">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject *</label>
+          <select class="form-select" id="cf-subject">
+            <option value="">Select a topic...</option>
+            <option value="Order Query">Order Query</option>
+            <option value="Delivery Issue">Delivery Issue</option>
+            <option value="Payment Issue">Payment Issue</option>
+            <option value="Refund Request">Refund Request</option>
+            <option value="Bulk / Wholesale Order">Bulk / Wholesale Order</option>
+            <option value="Product Feedback">Product Feedback</option>
+            <option value="Complaint">Complaint</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Order ID (if applicable)</label>
+          <input type="text" class="form-input" id="cf-orderid" placeholder="e.g. abc123xyz">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea class="form-input" id="cf-message" placeholder="Tell us how we can help you..."></textarea>
+        </div>
+
+        <button class="btn-submit" id="cf-submit" onclick="submitForm()">
+          ✉️ Send Message
+        </button>
+
+        <div class="or-divider">or reach us directly on</div>
+
+        <a href="https://wa.me/919342953995?text=Hi%2C%20I%20have%20a%20query%20about%20Aathi%27s%20Snaacks!" target="_blank" rel="noopener" class="btn-wa-large">
+          💬 Chat on WhatsApp
+        </a>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div class="success-icon">🎉</div>
+        <h3>Message Sent!</h3>
+        <p>Thank you for reaching out. We've received your message and will get back to you within 24 hours.</p>
+        <p style="margin-top:0.75rem;">For urgent queries, WhatsApp us at <a href="https://wa.me/919342953995">+91 9342953995</a>.</p>
+        <button onclick="resetForm()" style="margin-top:1.5rem;background:var(--dark);color:#fff;border:none;border-radius:999px;padding:0.75rem 1.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Send Another Message</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-head reveal">
+      <div class="section-label" style="text-align:center;">Quick Answers</div>
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-divider"></div>
+    </div>
+
+    <div id="faq-list"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© <span id="yr"></span> Aathi Shivaya Group of Companies. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Scroll reveal
+const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// FAQ data
+const FAQS = [
+  { q: 'How do I place an order?', a: 'Browse our products on the home page, add items to your cart, and proceed to checkout. Fill in your delivery details and complete payment via UPI. Your order will be confirmed once we verify your payment — usually within a few hours.' },
+  { q: 'What payment methods do you accept?', a: 'We currently accept only UPI payments. You can pay using any UPI app (Google Pay, PhonePe, Paytm, BHIM, or your bank\'s UPI app) to our UPI ID: 9442953995@okbizaxis. After paying, you can optionally upload a screenshot as proof.' },
+  { q: 'How long does delivery take?', a: 'Delivery typically takes 2–4 days within Tamil Nadu and 5–7 working days for other states. Remote areas may take up to 10 working days. Once your order is dispatched, we\'ll share the tracking details with you.' },
+  { q: 'Do you offer pan-India delivery?', a: 'Yes! We deliver to all states and union territories across India. There is no delivery to international addresses at this time.' },
+  { q: 'Can I cancel or modify my order?', a: 'You can cancel your order before it is dispatched. Once dispatched, cancellations are not possible. To cancel, contact us immediately at +91 9342953995. For modifications like address changes, reach out as early as possible.' },
+  { q: 'What if my order arrives damaged?', a: 'We take great care in packing, but if your order arrives damaged or incorrect, please photograph the product and contact us within 48 hours of delivery. We will arrange a replacement or refund as appropriate.' },
+  { q: 'Do your products contain allergens?', a: 'Yes. Our products contain or may contain cashews, groundnuts/peanuts, and sesame. They are made in a shared kitchen environment. If you have food allergies, please contact us before ordering.' },
+  { q: 'How should I store the products?', a: 'Store products in a cool, dry place away from direct sunlight and moisture. Keep them in an airtight container after opening for best freshness. Shelf life is indicated on the packaging.' },
+  { q: 'Do you offer bulk or wholesale orders?', a: 'Yes! We accept bulk orders for events, gifting, corporate orders, and retail. Contact us on WhatsApp at +91 9342953995 or email support@aathissnaacks.com with your requirements for a custom quote.' },
+  { q: 'Are your products FSSAI certified?', a: 'Yes. Aathi\'s Snaacks operates under FSSAI Licence No. 12422029000996 and PLN No. TNTTN3407. We comply with all applicable food safety regulations under the Food Safety and Standards Act, 2006.' },
+];
+
+const faqList = document.getElementById('faq-list');
+faqList.innerHTML = FAQS.map((f, i) => `
+  <div class="faq-item reveal">
+    <button class="faq-q" id="fq-${i}" onclick="toggleFaq(${i})">
+      <span>${f.q}</span>
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a" id="fa-${i}">${f.a}</div>
+  </div>`).join('');
+
+function toggleFaq(i) {
+  const q = document.getElementById('fq-' + i);
+  const a = document.getElementById('fa-' + i);
+  const isOpen = q.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-q').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.faq-a').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { q.classList.add('open'); a.classList.add('open'); }
+}
+
+// Re-observe FAQ items after render
+document.querySelectorAll('.faq-item').forEach(el => obs.observe(el));
+
+// Form submission (sends via WhatsApp)
+function submitForm() {
+  const name    = document.getElementById('cf-name').value.trim();
+  const phone   = document.getElementById('cf-phone').value.trim();
+  const subject = document.getElementById('cf-subject').value;
+  const message = document.getElementById('cf-message').value.trim();
+
+  if (!name)    { showToast('Please enter your name', 'error'); return; }
+  if (!phone || !/^\d{10}$/.test(phone)) { showToast('Enter a valid 10-digit phone number', 'error'); return; }
+  if (!subject) { showToast('Please select a subject', 'error'); return; }
+  if (!message) { showToast('Please enter your message', 'error'); return; }
+
+  const email   = document.getElementById('cf-email').value.trim();
+  const orderId = document.getElementById('cf-orderid').value.trim();
+
+  const btn = document.getElementById('cf-submit');
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  // Build WhatsApp message
+  const wa = `Hi, I have a query via the website contact form.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}${email?`%0A*Email:* ${encodeURIComponent(email)}`:''}%0A*Subject:* ${encodeURIComponent(subject)}${orderId?`%0A*Order ID:* ${encodeURIComponent(orderId)}`:''}%0A%0A*Message:*%0A${encodeURIComponent(message)}`;
+
+  // Open WhatsApp with pre-filled message
+  window.open(`https://wa.me/919342953995?text=${wa}`, '_blank');
+
+  // Show success state after short delay
+  setTimeout(() => {
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    btn.disabled = false; btn.textContent = '✉️ Send Message';
+  }, 800);
+}
+
+function resetForm() {
+  document.getElementById('form-wrap').style.display = 'block';
+  document.getElementById('form-success').style.display = 'none';
+  ['cf-name','cf-phone','cf-email','cf-orderid','cf-message'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cf-subject').value = '';
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
