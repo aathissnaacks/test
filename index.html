@@ -60,40 +60,55 @@
     });
   }
 
+  // ── GENERATE ORDER ID: AathiMMYYXXXX ──
+  function generateOrderId() {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const yy = String(now.getFullYear()).slice(-2);
+    const counterKey = `as_order_counter_${mm}${yy}`;
+    const current = parseInt(localStorage.getItem(counterKey) || '0') + 1;
+    localStorage.setItem(counterKey, String(current));
+    const seq = String(current).padStart(4, '0');
+    return `Aathi${mm}${yy}${seq}`;
+  }
+  window._generateOrderId = generateOrderId; // expose for fallback use
+
   // ── SAVE ORDER ──
   window.saveOrderToFirebase = async function(orderData) {
-    // Always save to localStorage as backup first
+    // Generate custom order ID
+    const customId = generateOrderId();
+
+    // Always save to localStorage as backup
     const saveLocal = (data, id) => {
       const orders = JSON.parse(localStorage.getItem('as_orders') || '[]');
       data.id = id;
       data.createdAt = new Date().toISOString();
       data.status = 'pending_payment';
-      // avoid duplicates
       if (!orders.find(o => o.id === id)) orders.push(data);
       localStorage.setItem('as_orders', JSON.stringify(orders));
     };
 
     if (!db) {
       console.warn('[Firebase] No db — saving to localStorage only');
-      const id = 'ORD' + Date.now();
-      saveLocal(orderData, id);
-      return id;
+      saveLocal(orderData, customId);
+      return customId;
     }
 
     try {
-      const ref = await addDoc(collection(db, 'orders'), {
+      // Use setDoc with our custom ID instead of addDoc
+      const { setDoc, doc: fsDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      await setDoc(fsDoc(db, 'orders', customId), {
         ...orderData,
         status: 'pending_payment',
         createdAt: serverTimestamp()
       });
-      console.log('[Firebase] Order saved to Firestore:', ref.id);
-      saveLocal(orderData, ref.id);
-      return ref.id;
+      console.log('[Firebase] Order saved to Firestore:', customId);
+      saveLocal(orderData, customId);
+      return customId;
     } catch(e) {
       console.error('[Firebase] Order save failed:', e.code, e.message);
-      const id = 'ORD' + Date.now();
-      saveLocal(orderData, id);
-      return id;
+      saveLocal(orderData, customId);
+      return customId;
     }
   };
 
@@ -959,10 +974,11 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
       </div>
       <div class="footer-links">
         <h4>Quick Links</h4>
-        <a href="about.html">About Us</a>
         <a href="terms.html">Terms & Conditions</a>
+        <a href="refund.html">Cancellation & Refund</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="contact.html">Contact Us</a>
+        <a href="admin.html">Admin Panel</a>
       </div>
       <div class="footer-contact">
         <h4 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;margin-bottom:1rem;font-family:'DM Sans',sans-serif;font-weight:600;">Contact</h4>
@@ -1102,7 +1118,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
       </div>
 
       <div class="upi-id-box">
-        <span>9442953995@okbizaxis</span>
+        <span>9342953995@okbizaxis</span>
         <button class="copy-btn" onclick="copyUPI()">Copy</button>
       </div>
 
@@ -1145,7 +1161,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 // ══════════════════════════════════════════════════════════
 // STORE CONFIG
 // ══════════════════════════════════════════════════════════
-const UPI_ID = '9442953995@okbizaxis';
+const UPI_ID = '9342953995@okbizaxis';
 const STORE_NAME = "Aathi's Snaacks";
 
 // ══════════════════════════════════════════════════════════
@@ -1767,7 +1783,7 @@ async function placeOrder() {
   };
 
   try { currentOrderId = await window.saveOrderToFirebase(orderData); }
-  catch(e) { currentOrderId = 'ORD' + Date.now(); }
+  catch(e) { currentOrderId = window._generateOrderId ? window._generateOrderId() : 'Aathi' + (()=>{ const n=new Date(); return String(n.getMonth()+1).padStart(2,'0') + String(n.getFullYear()).slice(-2) + '0001'; })(); }
 
   btn.disabled = false; btn.textContent = 'Continue to Payment →';
   closeCheckout();
