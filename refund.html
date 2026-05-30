@@ -3,131 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Policy | Aathi's Snaacks</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                brand: {
-                    bg: '#FAFAF5',
-                    red: '#C04000',
-                    gold: '#D4AF37',
-                    dark: '#2D2D2D'
-                }
-            },
-            fontFamily: {
-                sans: ['Outfit', 'sans-serif'],
-                tamil: ['Mukta Malar', 'sans-serif'],
-            }
-        }
-    }
-}
-</script>
-
+<title>Cancellation & Refund Policy — Aathi's Snaacks</title>
+<meta name="description" content="Cancellation and Refund Policy for Aathi's Snaacks. Understand our process for cancellations, returns, and refunds.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.aathissnaacks.com/refund.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body { background:#FAFAF5; color:#2D2D2D; }
-.font-ta { font-family: 'Mukta Malar', sans-serif; }
+:root { --red:#C04000; --gold:#D4AF37; --dark:#1A1A1A; --bg:#FAFAF5; --border:rgba(212,175,55,0.2); --green:#16a34a; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--dark); line-height:1.8; }
+h1,h2,h3,h4 { font-family:'Playfair Display',serif; }
+a { color:var(--red); }
+.site-header { position:sticky; top:0; z-index:100; background:rgba(250,250,245,0.97); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); box-shadow:0 2px 20px rgba(0,0,0,0.06); }
+.header-inner { max-width:1100px; margin:auto; padding:0 1.5rem; height:68px; display:flex; align-items:center; justify-content:space-between; }
+.logo-wrap { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+.logo-img { width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); background:#fff; }
+.logo-text h1 { font-size:1.1rem; color:var(--dark); line-height:1.2; }
+.logo-text p { font-size:0.6rem; color:var(--red); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; font-family:'DM Sans',sans-serif; }
+.nav-links { display:flex; gap:1.5rem; align-items:center; }
+.nav-links a { font-size:0.88rem; font-weight:500; color:#555; text-decoration:none; transition:color 0.2s; }
+.nav-links a:hover { color:var(--red); }
+.btn-shop { background:var(--dark); color:#fff !important; padding:0.55rem 1.25rem; border-radius:999px; font-size:0.85rem; font-weight:600; }
+.btn-shop:hover { background:var(--red); }
 
-[data-lang="ta"] { display:none; }
-body.lang-tamil [data-lang="en"] { display:none; }
-body.lang-tamil [data-lang="ta"] { display:block; }
+.page-hero { background:var(--dark); color:#fff; padding:4rem 1.5rem 3rem; text-align:center; }
+.page-hero h2 { font-size:clamp(2rem,4vw,2.8rem); margin-bottom:0.5rem; }
+.page-hero p { color:#888; font-size:0.9rem; }
+
+.doc-wrap { max-width:860px; margin:0 auto; padding:3.5rem 1.5rem 5rem; }
+.last-updated { display:inline-block; background:#f0f0f0; border-radius:999px; padding:0.3rem 0.9rem; font-size:0.78rem; color:#888; margin-bottom:2rem; font-family:'DM Sans',sans-serif; }
+
+/* QUICK SUMMARY CARDS */
+.summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-bottom:3rem; }
+.summary-card { border-radius:1rem; padding:1.25rem; text-align:center; }
+.summary-card.green { background:#f0fdf4; border:1px solid #bbf7d0; }
+.summary-card.red { background:#fef2f2; border:1px solid #fecaca; }
+.summary-card.amber { background:#fffbeb; border:1px solid #fde68a; }
+.summary-card .sc-icon { font-size:1.8rem; margin-bottom:0.5rem; }
+.summary-card .sc-title { font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.25rem; }
+.summary-card.green .sc-title { color:#166534; }
+.summary-card.red .sc-title { color:#991b1b; }
+.summary-card.amber .sc-title { color:#92400e; }
+.summary-card .sc-desc { font-size:0.8rem; color:#555; line-height:1.5; }
+
+.toc { background:#fff; border:1px solid #e8e8e8; border-radius:1rem; padding:1.5rem 2rem; margin-bottom:3rem; }
+.toc h3 { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; margin-bottom:1rem; font-family:'DM Sans',sans-serif; font-weight:700; }
+.toc ol { padding-left:1.25rem; }
+.toc li { margin-bottom:0.4rem; }
+.toc a { font-size:0.88rem; color:var(--red); text-decoration:none; }
+.toc a:hover { text-decoration:underline; }
+
+.doc-section { margin-bottom:3rem; scroll-margin-top:90px; }
+.doc-section h2 { font-size:1.4rem; color:var(--dark); margin-bottom:1rem; padding-bottom:0.6rem; border-bottom:2px solid var(--gold); display:inline-block; }
+.doc-section h3 { font-size:1.05rem; color:var(--dark); margin:1.5rem 0 0.5rem; }
+.doc-section p { font-size:0.95rem; color:#555; margin-bottom:1rem; }
+.doc-section ul,.doc-section ol { padding-left:1.5rem; margin-bottom:1rem; }
+.doc-section li { font-size:0.95rem; color:#555; margin-bottom:0.5rem; }
+
+.highlight-box { background:#fff8ee; border:1px solid rgba(192,64,0,0.2); border-radius:0.75rem; padding:1.25rem 1.5rem; margin:1.25rem 0; }
+.highlight-box p { margin:0; font-size:0.92rem; color:#555; }
+.highlight-box strong { color:var(--red); }
+.green-box { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:0.75rem; padding:1.25rem 1.5rem; margin:1.25rem 0; }
+.green-box p { margin:0; font-size:0.92rem; color:#166534; }
+.red-box { background:#fef2f2; border:1px solid #fecaca; border-radius:0.75rem; padding:1.25rem 1.5rem; margin:1.25rem 0; }
+.red-box p { margin:0; font-size:0.92rem; color:#991b1b; }
+
+.info-table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+.info-table th { background:var(--dark); color:#fff; padding:0.6rem 1rem; text-align:left; font-weight:600; font-size:0.82rem; }
+.info-table td { padding:0.65rem 1rem; border-bottom:1px solid #f0f0f0; color:#555; vertical-align:top; }
+.info-table tr:nth-child(even) td { background:#fafafa; }
+.info-table tr:last-child td { border-bottom:none; }
+
+.steps-list { counter-reset:step; list-style:none; padding:0; margin:1rem 0; }
+.steps-list li { counter-increment:step; display:flex; gap:1rem; padding:0.85rem 0; border-bottom:1px solid #f5f5f5; font-size:0.95rem; color:#555; }
+.steps-list li:last-child { border:none; }
+.steps-list li::before { content:counter(step); background:var(--dark); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; flex-shrink:0; margin-top:1px; font-family:'DM Sans',sans-serif; }
+
+.contact-cta { background:var(--dark); color:#fff; border-radius:1.25rem; padding:2rem; text-align:center; margin-top:3rem; }
+.contact-cta h3 { font-size:1.3rem; color:#fff; margin-bottom:0.5rem; }
+.contact-cta p { color:#aaa; font-size:0.88rem; margin-bottom:1.25rem; }
+.cta-btns { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
+.btn-wa { display:inline-flex; align-items:center; gap:0.5rem; background:#25D366; color:#fff; padding:0.75rem 1.5rem; border-radius:999px; font-weight:600; font-size:0.9rem; text-decoration:none; transition:opacity 0.2s; }
+.btn-wa:hover { opacity:0.9; text-decoration:none; }
+.btn-outline { display:inline-flex; align-items:center; gap:0.5rem; background:transparent; border:1.5px solid rgba(255,255,255,0.25); color:#fff; padding:0.75rem 1.5rem; border-radius:999px; font-weight:600; font-size:0.9rem; text-decoration:none; transition:all 0.2s; }
+.btn-outline:hover { background:rgba(255,255,255,0.1); text-decoration:none; }
+
+.site-footer { background:#0a0a0a; color:#fff; padding:2rem 1.5rem; border-top:4px solid var(--red); }
+.footer-inner { max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.82rem; color:#555; }
+.footer-links { display:flex; gap:1.5rem; flex-wrap:wrap; }
+.footer-links a { color:#666; text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:#fff; }
+@media (max-width:640px) { .nav-links { display:none; } .summary-grid { grid-template-columns:1fr 1fr; } }
 </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<header class="sticky top-0 bg-white border-b shadow-sm z-50">
-<div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-
-<div class="flex items-center gap-3">
-<img src="logonobg.jpeg" class="w-10 h-10 rounded-full border">
-<h1 class="font-bold text-lg">Aathi's Snaacks</h1>
-</div>
-
-<div>
-<button onclick="setLanguage('en')" class="px-3 py-1 bg-brand-dark text-white rounded-full text-sm">EN</button>
-<button onclick="setLanguage('ta')" class="px-3 py-1 text-gray-500 rounded-full text-sm font-ta">தமிழ்</button>
-</div>
-
-</div>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <img src="logonobg.jpeg" alt="Aathi's Snaacks" class="logo-img" width="44" height="44"
+        onerror="this.style.background='#D4AF37';this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 44 44%22><text y=%2232%22 font-size=%2224%22>🍬</text></svg>'">
+      <div class="logo-text">
+        <h1>Aathi's Snaacks</h1>
+        <p>Aathi Shivaya Group of Companies</p>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#products">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html#products" class="btn-shop">Order Now</a>
+    </nav>
+  </div>
 </header>
 
-<!-- HERO -->
-<section class="text-center py-12">
-<h1 class="text-4xl font-extrabold text-brand-dark mb-4">
-<span data-lang="en">Policy</span>
-<span data-lang="ta" class="font-ta">கொள்கை</span>
-</h1>
-
-<p class="text-gray-600">
-<span data-lang="en">Transparency builds trust. Here's everything you need to know.</span>
-<span data-lang="ta" class="font-ta">நம்பிக்கைக்கான வெளிப்படைத்தன்மை.</span>
-</p>
-</section>
-
-<!-- CONTENT -->
-<section class="max-w-4xl mx-auto px-4 pb-16">
-<div class="bg-white rounded-3xl shadow-xl p-6 sm:p-10 leading-relaxed text-gray-700 space-y-4">
-
-<h2 class="text-2xl font-bold text-brand-dark">Cancellation & Refund Policy</h2>
-
-<p><strong>Last updated on 04-04-2026</strong></p>
-
-<p>
-Aathi Shivaya Group of Companies believes in helping its customers as far as possible, and has therefore adopted a liberal cancellation policy. Under this policy:
-</p>
-
-<ul class="list-disc pl-5 space-y-3">
-
-<li>
-Cancellations will be considered only if the request is made immediately after placing the order. However, the cancellation request may not be entertained if the orders have been communicated to the vendors/merchants and they have initiated the process of shipping them.
-</li>
-
-<li>
-Aathi Shivaya Group of Companies does not accept cancellation requests for perishable items like food and edible products. However, refund/replacement can be made if the customer establishes that the quality of the product delivered is not good.
-</li>
-
-<li>
-In case of receipt of damaged or defective items, please report the same to our Customer Service team. The request will be entertained once the merchant has checked and determined the issue at their end. This should be reported within the same day of receipt of the products.
-</li>
-
-<li>
-In case you feel that the product received is not as shown on the website or as per your expectations, you must bring it to the notice of our customer service within the same day of receiving the product. The Customer Service Team after looking into your complaint will take an appropriate decision.
-</li>
-
-<li>
-In case of complaints regarding products that come with a warranty from manufacturers, please refer the issue to them.
-</li>
-
-<li>
-In case of any refunds approved by Aathi Shivaya Group of Companies, it will take 1–2 working days for the refund to be processed to the end customer.
-</li>
-
-</hl>
+<div class="page-hero">
+  <h2>Cancellation &amp; Refund Policy</h2>
+  <p>Last updated: <span id="lu-date"></span></p>
 </div>
-</section>
-<!-- FOOTER -->
-<footer class="bg-black text-white py-10 text-center">
-<h2 class="text-2xl font-bold mb-2">Aathi's Snaacks</h2>
-<p class="text-gray-400 text-sm">Aathi Shivaya Group of Companies</p>
+
+<div class="doc-wrap">
+  <span class="last-updated">Effective Date: <span id="eff-date"></span></span>
+
+  <!-- QUICK SUMMARY -->
+  <div class="summary-grid">
+    <div class="summary-card green">
+      <div class="sc-icon">✅</div>
+      <div class="sc-title">Before Dispatch</div>
+      <div class="sc-desc">Full refund. Cancel anytime before we ship.</div>
+    </div>
+    <div class="summary-card amber">
+      <div class="sc-icon">📦</div>
+      <div class="sc-title">After Dispatch</div>
+      <div class="sc-desc">Cancellation not possible. Delivery must be completed.</div>
+    </div>
+    <div class="summary-card green">
+      <div class="sc-icon">💔</div>
+      <div class="sc-title">Damaged / Wrong Item</div>
+      <div class="sc-desc">Full refund or replacement within 48 hrs of delivery.</div>
+    </div>
+    <div class="summary-card red">
+      <div class="sc-icon">🚫</div>
+      <div class="sc-title">Change of Mind</div>
+      <div class="sc-desc">Not eligible after dispatch. Food items cannot be returned.</div>
+    </div>
+    <div class="summary-card green">
+      <div class="sc-icon">💸</div>
+      <div class="sc-title">Refund Timeline</div>
+      <div class="sc-desc">Approved refunds credited within 5–7 working days to UPI.</div>
+    </div>
+    <div class="summary-card amber">
+      <div class="sc-icon">📞</div>
+      <div class="sc-title">Contact Us</div>
+      <div class="sc-desc">WhatsApp +91 9342953995 for all refund requests.</div>
+    </div>
+  </div>
+
+  <div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+      <li><a href="#r1">Overview</a></li>
+      <li><a href="#r2">Order Cancellations</a></li>
+      <li><a href="#r3">Eligibility for Refunds</a></li>
+      <li><a href="#r4">Non-Refundable Cases</a></li>
+      <li><a href="#r5">How to Request a Refund</a></li>
+      <li><a href="#r6">Refund Process and Timeline</a></li>
+      <li><a href="#r7">Replacement Policy</a></li>
+      <li><a href="#r8">Undelivered Orders</a></li>
+      <li><a href="#r9">Failed or Duplicate Payments</a></li>
+      <li><a href="#r10">Dispute Resolution</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="doc-section" id="r1">
+    <h2>1. Overview</h2>
+    <p>At Aathi's Snaacks, we take great pride in our handcrafted products and want every customer to be completely satisfied. This policy outlines the circumstances under which we accept cancellations and process refunds.</p>
+    <p>As our products are <strong>perishable food items made fresh in small batches</strong>, we are unable to accept returns in the same manner as non-food products. However, we are fully committed to resolving any issues fairly and promptly.</p>
+    <div class="highlight-box">
+      <p><strong>Governing Law:</strong> This policy is governed by the Consumer Protection Act, 2019, the Consumer Protection (E-Commerce) Rules, 2020, and the Food Safety and Standards Act, 2006.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="doc-section" id="r2">
+    <h2>2. Order Cancellations</h2>
+
+    <h3>2.1 Cancellation Before Dispatch</h3>
+    <div class="green-box">
+      <p>✅ <strong>You can cancel your order any time before it is dispatched for a full refund.</strong></p>
+    </div>
+    <p>To cancel before dispatch:</p>
+    <ul>
+      <li>Contact us immediately on WhatsApp at <strong>+91 9342953995</strong> or email <strong>support@aathissnaacks.com</strong></li>
+      <li>Provide your Order ID and reason for cancellation</li>
+      <li>We will confirm the cancellation and initiate a full refund</li>
+    </ul>
+    <p>Most orders are dispatched within 1–2 working days of payment confirmation. Please cancel as early as possible to ensure we can stop the shipment.</p>
+
+    <h3>2.2 Cancellation After Dispatch</h3>
+    <div class="red-box">
+      <p>🚫 <strong>Orders cannot be cancelled after they have been dispatched.</strong></p>
+    </div>
+    <p>Once an order has been handed over to our courier partner, we are unable to recall it. In such cases:</p>
+    <ul>
+      <li>You must accept the delivery</li>
+      <li>If the product arrives damaged or incorrect, please refer to Section 3 below for refund eligibility</li>
+      <li>Refusing delivery without a valid reason will result in re-delivery charges and will not automatically qualify for a refund</li>
+    </ul>
+
+    <h3>2.3 Cancellation by Aathi's Snaacks</h3>
+    <p>We reserve the right to cancel an order in the following circumstances:</p>
+    <ul>
+      <li>Payment not verified within 24 hours of order placement</li>
+      <li>Ordered product is out of stock or unavailable</li>
+      <li>Delivery to the specified address is not feasible</li>
+      <li>Fraudulent or suspicious order activity</li>
+    </ul>
+    <p>In any such case, we will notify you promptly and issue a full refund if payment was already made.</p>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="doc-section" id="r3">
+    <h2>3. Eligibility for Refunds</h2>
+    <p>Refunds will be considered in the following situations. Please contact us within the specified timeframe with photographic evidence where required.</p>
+
+    <table class="info-table">
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Eligible for Refund?</th>
+          <th>Contact Deadline</th>
+          <th>Evidence Required</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Order cancelled before dispatch</td>
+          <td>✅ Full refund</td>
+          <td>Before dispatch</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td>Product received is damaged</td>
+          <td>✅ Full refund or replacement</td>
+          <td>Within 48 hours of delivery</td>
+          <td>Clear photos of damaged product and packaging</td>
+        </tr>
+        <tr>
+          <td>Wrong product delivered</td>
+          <td>✅ Full refund or replacement</td>
+          <td>Within 48 hours of delivery</td>
+          <td>Photos of received product and invoice</td>
+        </tr>
+        <tr>
+          <td>Product quality is significantly different from description</td>
+          <td>✅ Refund at our discretion after review</td>
+          <td>Within 48 hours of delivery</td>
+          <td>Photos and detailed description of issue</td>
+        </tr>
+        <tr>
+          <td>Order not delivered within 15 working days of dispatch</td>
+          <td>✅ Full refund after investigation</td>
+          <td>After 15 working days</td>
+          <td>Order ID, tracking information</td>
+        </tr>
+        <tr>
+          <td>Order cancelled by us due to stock unavailability</td>
+          <td>✅ Full refund</td>
+          <td>Initiated by us automatically</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td>Duplicate/double payment for same order</td>
+          <td>✅ Full refund of extra payment</td>
+          <td>Within 48 hours of payment</td>
+          <td>Transaction reference numbers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="doc-section" id="r4">
+    <h2>4. Non-Refundable Cases</h2>
+    <div class="red-box">
+      <p>🚫 <strong>Refunds will NOT be issued in the following cases:</strong></p>
+    </div>
+    <ul>
+      <li><strong>Change of mind</strong> after the order is dispatched</li>
+      <li><strong>Minor taste or texture variations</strong> — As all our products are handmade in small batches, natural variations in colour, shape, crunch, and sweetness are inherent and expected. These are not defects.</li>
+      <li><strong>Damage due to improper storage</strong> after delivery — We are not responsible for product quality loss if it is not stored as per instructions on the packaging</li>
+      <li><strong>Consumption of the product</strong> before raising a complaint — Partly consumed products are not eligible for refund unless a clear quality issue was present</li>
+      <li><strong>Delayed delivery due to courier issues</strong> — While we will assist in tracking, we cannot guarantee courier timelines, especially during peak seasons or natural calamities</li>
+      <li><strong>Incorrect address provided by customer</strong> resulting in non-delivery or re-delivery charges</li>
+      <li><strong>Refusal to accept delivery</strong> without a valid quality or safety reason</li>
+      <li><strong>Complaints raised after 48 hours</strong> of delivery for quality or damage issues (except for non-delivery cases)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="doc-section" id="r5">
+    <h2>5. How to Request a Refund</h2>
+    <p>To initiate a refund, follow these steps:</p>
+    <ol class="steps-list">
+      <li><strong>Contact us within the eligible timeframe.</strong> Reach us on WhatsApp at +91 9342953995 or email support@aathissnaacks.com. Do not delay — complaints raised after 48 hours of delivery may not be accepted.</li>
+      <li><strong>Provide your Order ID.</strong> This is the order reference number you received when your order was placed (found in your order confirmation).</li>
+      <li><strong>Describe the issue clearly.</strong> Explain what went wrong — damaged packaging, wrong product, quality issue, etc.</li>
+      <li><strong>Share photographs.</strong> For quality, damage, or wrong-product claims, clear photographs of the product, packaging, and the label are required. Without photos, we may not be able to process your refund.</li>
+      <li><strong>Wait for our review.</strong> We will review your complaint and respond within 48 hours with a decision. We may ask follow-up questions if needed.</li>
+      <li><strong>Refund confirmation.</strong> Once approved, we will confirm the refund amount and process it to your UPI account within 5–7 working days.</li>
+    </ol>
+
+    <div class="highlight-box">
+      <p><strong>WhatsApp is the fastest channel:</strong> Message us at <strong>+91 9342953995</strong> with your Order ID and photos for the quickest resolution.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="doc-section" id="r6">
+    <h2>6. Refund Process and Timeline</h2>
+    <h3>6.1 Refund Method</h3>
+    <p>All refunds are processed to the <strong>UPI account from which the original payment was made</strong>. We do not issue refunds via cash, cheque, or any other payment method. If you paid via a specific UPI app (e.g., GPay, PhonePe, Paytm), the refund will be credited to the same account.</p>
+
+    <h3>6.2 Refund Timeline</h3>
+    <table class="info-table">
+      <tr><th>Stage</th><th>Timeframe</th></tr>
+      <tr><td>Complaint acknowledgement</td><td>Within 24 hours of receiving your complaint</td></tr>
+      <tr><td>Complaint review and decision</td><td>Within 48 hours of acknowledgement</td></tr>
+      <tr><td>Refund initiation (after approval)</td><td>Within 2 working days of approval</td></tr>
+      <tr><td>Refund credited to your UPI</td><td>5–7 working days after initiation</td></tr>
+      <tr><td>Total end-to-end</td><td>Up to 10 working days from complaint</td></tr>
+    </table>
+
+    <p>Refund timelines may vary based on your bank's processing time. UPI refunds typically reflect within 3–5 working days of initiation, but some banks may take up to 7 working days.</p>
+
+    <h3>6.3 Refund Confirmation</h3>
+    <p>We will notify you via WhatsApp or email when the refund is initiated, along with a reference number if available. Please check your UPI app or bank statement. If you do not receive the refund within 10 working days of our confirmation, contact us immediately with the refund reference number.</p>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="doc-section" id="r7">
+    <h2>7. Replacement Policy</h2>
+    <p>In many cases, we may offer a <strong>replacement</strong> instead of a refund — particularly for damaged or wrong-product deliveries. Replacements are:</p>
+    <ul>
+      <li>Dispatched within 2–3 working days of complaint approval</li>
+      <li>Sent at no additional cost to the customer</li>
+      <li>Subject to product availability</li>
+    </ul>
+    <p>If a replacement is not available or preferred, a full refund will be issued instead.</p>
+    <div class="green-box">
+      <p>✅ <strong>Customer choice:</strong> For eligible claims, you may choose between a replacement product or a full monetary refund. We will offer both options and respect your preference.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="doc-section" id="r8">
+    <h2>8. Undelivered Orders</h2>
+    <h3>8.1 Order Not Received</h3>
+    <p>If you have not received your order within the expected delivery window (7 working days for most locations), please contact us with your Order ID. We will:</p>
+    <ol>
+      <li>Verify the dispatch status with our courier partner</li>
+      <li>Initiate a trace request with the courier</li>
+      <li>Provide you with an update within 48 hours</li>
+    </ol>
+    <p>If the courier confirms that the package is lost or undeliverable and it has been more than 15 working days since dispatch, we will issue a full refund or resend the order.</p>
+
+    <h3>8.2 Returned to Sender</h3>
+    <p>If your order is returned to us due to:</p>
+    <ul>
+      <li>Incorrect or incomplete address provided by you</li>
+      <li>Multiple failed delivery attempts due to your unavailability</li>
+      <li>Refusal to accept delivery</li>
+    </ul>
+    <p>In such cases, re-delivery charges will apply. If re-delivery is not possible or desired, a partial refund (order value minus shipping charges) will be issued. Note: perishable items returned to us cannot be reshipped and may not be eligible for a refund.</p>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="doc-section" id="r9">
+    <h2>9. Failed or Duplicate Payments</h2>
+    <h3>9.1 Payment Deducted but Order Not Confirmed</h3>
+    <p>If your UPI payment was deducted but your order was not confirmed on our end, please:</p>
+    <ol>
+      <li>Note your UPI transaction reference number (UTR number) from your UPI app</li>
+      <li>Contact us on WhatsApp at +91 9342953995 within 48 hours</li>
+      <li>Share your name, phone number, UTR number, and amount deducted</li>
+    </ol>
+    <p>We will verify the transaction and either confirm your order or issue a full refund within 5 working days. Most UPI payment failures where money is deducted are auto-reversed by your bank within 5–7 working days.</p>
+
+    <h3>9.2 Duplicate Payment</h3>
+    <p>If you have accidentally paid twice for the same order, contact us immediately with both transaction reference numbers. We will verify and refund the duplicate payment within 5 working days.</p>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="doc-section" id="r10">
+    <h2>10. Dispute Resolution</h2>
+    <p>We are committed to resolving all complaints fairly and amicably. If you are not satisfied with our response:</p>
+
+    <h3>Step 1 — Contact Our Grievance Officer</h3>
+    <table class="info-table">
+      <tr><th>Detail</th><th>Information</th></tr>
+      <tr><td>Name</td><td>Alagu Panduva Murthy S.</td></tr>
+      <tr><td>WhatsApp / Phone</td><td><a href="tel:+919342953995">+91 9342953995</a></td></tr>
+      <tr><td>Email</td><td><a href="mailto:support@aathissnaacks.com">support@aathissnaacks.com</a></td></tr>
+      <tr><td>Response Time</td><td>Within 48 hours acknowledgement, 30 days resolution</td></tr>
+    </table>
+
+    <h3>Step 2 — Escalate to Consumer Forum</h3>
+    <p>If unresolved within 30 days, you may escalate to:</p>
+    <ul>
+      <li><strong>National Consumer Helpline:</strong> Call 1800-11-4000 (toll-free, Mon–Sat, 9:30 AM – 5:30 PM)</li>
+      <li><strong>Online Consumer Portal:</strong> <a href="https://consumerhelpline.gov.in" target="_blank" rel="noopener">consumerhelpline.gov.in</a></li>
+      <li><strong>E-Daakhil (Consumer Forum Online):</strong> <a href="https://edaakhil.nic.in" target="_blank" rel="noopener">edaakhil.nic.in</a></li>
+    </ul>
+
+    <h3>Step 3 — Jurisdiction</h3>
+    <p>Any unresolved disputes are subject to the exclusive jurisdiction of the Consumer Disputes Redressal Forum in <strong>Thoothukudi, Tamil Nadu, India</strong>, in accordance with the Consumer Protection Act, 2019.</p>
+
+    <div class="contact-cta">
+      <h3>Need Help With a Refund?</h3>
+      <p>The fastest way to get your issue resolved is via WhatsApp. We typically respond within a few hours.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/919342953995?text=Hi%2C%20I%20need%20help%20with%20a%20refund%20for%20my%20order." target="_blank" rel="noopener" class="btn-wa">💬 WhatsApp Us</a>
+        <a href="mailto:support@aathissnaacks.com" class="btn-outline">📧 Email Us</a>
+        <a href="contact.html" class="btn-outline">📋 Contact Form</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>© <span id="yr"></span> Aathi Shivaya Group of Companies. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
 </footer>
 
 <script>
-function setLanguage(lang){
-    if(lang === 'ta'){
-        document.body.classList.add('lang-tamil');
-    } else {
-        document.body.classList.remove('lang-tamil');
-    }
-}
+const now = new Date();
+const fmt = { day:'2-digit', month:'long', year:'numeric' };
+document.getElementById('yr').textContent = now.getFullYear();
+document.getElementById('lu-date').textContent = now.toLocaleDateString('en-IN', fmt);
+document.getElementById('eff-date').textContent = now.toLocaleDateString('en-IN', fmt);
 </script>
-
 </body>
 </html>
