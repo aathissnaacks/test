@@ -191,54 +191,82 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 }
 .header-inner {
   max-width: 1200px; margin: auto;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   display: flex; align-items: center;
   justify-content: space-between;
-  height: 72px; gap: 1rem;
+  height: 60px; gap: 0.5rem;
 }
-.logo-wrap { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.logo-wrap {
+  display: flex; align-items: center;
+  gap: 0.6rem; text-decoration: none;
+  min-width: 0; flex: 1;
+}
 .logo-img {
-  width: 48px; height: 48px; border-radius: 50%;
-  object-fit: cover;
+  width: 40px; height: 40px;
+  border-radius: 50%; object-fit: cover;
   border: 2px solid var(--gold);
-  background: #fff;
+  background: #fff; flex-shrink: 0;
 }
-.logo-text h1 { font-size: 1.15rem; color: var(--dark); line-height: 1.2; }
-.logo-text p { font-size: 0.62rem; color: var(--red); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'DM Sans', sans-serif; }
+.logo-text { min-width: 0; }
+.logo-text h1 {
+  font-size: 1rem; color: var(--dark);
+  line-height: 1.2; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.logo-text p {
+  font-size: 0.55rem; color: var(--red);
+  font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-.header-actions { display: flex; align-items: center; gap: 0.75rem; }
+.header-actions {
+  display: flex; align-items: center;
+  gap: 0.5rem; flex-shrink: 0;
+}
 
 .lang-toggle {
   display: flex; background: #fff;
   border: 1px solid #e5e5e5;
-  border-radius: 999px; padding: 3px; gap: 2px;
+  border-radius: 999px; padding: 2px; gap: 1px;
 }
 .lang-btn {
-  border: none; cursor: pointer; font-size: 0.78rem; font-weight: 600;
-  padding: 5px 14px; border-radius: 999px;
-  transition: all 0.2s; background: transparent; color: #888;
-  font-family: 'Mukta Malar', sans-serif;
+  border: none; cursor: pointer;
+  font-size: 0.72rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px;
+  transition: all 0.2s; background: transparent;
+  color: #888; font-family: 'Mukta Malar', sans-serif;
+  white-space: nowrap;
 }
 .lang-btn.active { background: var(--dark); color: #fff; }
 
 .cart-btn {
   position: relative; background: var(--dark); color: #fff;
   border: none; cursor: pointer;
-  width: 44px; height: 44px; border-radius: 50%;
+  width: 40px; height: 40px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; transition: all 0.2s;
+  font-size: 1.1rem; transition: all 0.2s; flex-shrink: 0;
 }
 .cart-btn:hover { background: var(--red); transform: scale(1.05); }
 .cart-count {
-  position: absolute; top: -4px; right: -4px;
+  position: absolute; top: -3px; right: -3px;
   background: var(--red); color: #fff;
-  width: 18px; height: 18px; border-radius: 50%;
-  font-size: 0.65rem; font-weight: 700;
+  width: 17px; height: 17px; border-radius: 50%;
+  font-size: 0.6rem; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   font-family: 'DM Sans', sans-serif;
   display: none;
 }
 .cart-count.show { display: flex; }
+
+/* ── Mobile header tweaks ── */
+@media (max-width: 380px) {
+  .logo-text p { display: none; }
+  .logo-text h1 { font-size: 0.92rem; }
+  .lang-btn { padding: 4px 8px; font-size: 0.68rem; }
+}
 
 /* ─── HERO ─── */
 .hero {
@@ -828,16 +856,17 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="logo-wrap">
-      <img src="logonobg.jpeg" alt="Aathi's Snaacks Logo" class="logo-img" width="48" height="48" onerror="this.style.background='#D4AF37';this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><text y=%2232%22 font-size=%2228%22>🍬</text></svg>'">
+      <img src="logonobg.jpeg" alt="Aathi's Snaacks Logo" class="logo-img" width="40" height="40"
+        onerror="this.style.background='#D4AF37';this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><text y=%2228%22 font-size=%2224%22>🍬</text></svg>'">
       <div class="logo-text">
         <h1>Aathi's Snaacks</h1>
         <p>Aathi Shivaya Group of Companies</p>
       </div>
     </a>
     <div class="header-actions">
-      <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" id="btn-ta" onclick="setLang('ta')">தமிழ்</button>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')" aria-pressed="true">EN</button>
+        <button class="lang-btn" id="btn-ta" onclick="setLang('ta')" aria-pressed="false">தமிழ்</button>
       </div>
       <button class="cart-btn" onclick="openCart()" aria-label="Open cart">
         🛒
@@ -978,6 +1007,7 @@ body.lang-tamil button[data-lang="ta"] { display: inline; }
         <a href="refund.html">Cancellation & Refund</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="contact.html">Contact Us</a>
+        <a href="admin.html">Admin Panel</a>
       </div>
       <div class="footer-contact">
         <h4 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;margin-bottom:1rem;font-family:'DM Sans',sans-serif;font-weight:600;">Contact</h4>
